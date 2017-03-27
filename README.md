@@ -20,6 +20,13 @@ word boundaries.
 That is, "HelloWorld" is segmented "Hello World" whereas "HELLOworld" is
 segmented "HELLO world."
 
+Characters not within words (such as spaces, punctuations, and underscores)
+are not included in the output string except as they are a part of the case
+being converted to. Multiple adjacent word boundaries (such as a series of
+underscores) are folded into one. ("hello__world" in snake case is therefore
+"hello_world", not the exact same string). Leading or trailing word boundary
+indicators are dropped, except insofar as CamelCase capitalizes the first word.
+
 ### Cases contained in this library:
 
 1. CamelCase
@@ -29,8 +36,20 @@ segmented "HELLO world."
 5. mixedCase
 6. Title Case
 
+
+### Contributing
+
+PRs of additional well-established cases welcome.
+
+This library is a little bit opinionated (dropping punctuation, for example).
+If that doesn't fit your use case, I hope there is another crate that does. I
+would prefer **not** to receive PRs to make this behavior more configurable.
+
+Bug reports & fixes always welcome. :-)
+
 ### License
 
-heck is primarily distributed under the terms of both the MIT license and the Apache License (Version 2.0).
+heck is primarily distributed under the terms of both the MIT license and the
+Apache License (Version 2.0).
 
 See LICENSE-APACHE and LICENSE-MIT for details.
