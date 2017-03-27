@@ -34,10 +34,7 @@ impl<T: SnakeCase> SnekCase for T {
 
 impl SnakeCase for str {
     fn to_snake_case(&self) -> String {
-        ::transform(self, |c, s| {
-            s.push('_');
-            s.extend(c.to_lowercase())
-        }, |c, s| s.extend(c.to_lowercase()))
+        ::transform(self, ::lowercase, |s| s.push('_'))
     }
 }
 
@@ -56,11 +53,12 @@ mod tests {
 
     t!(test1: "CamelCase" => "camel_case");
     t!(test2: "This is Human case." => "this_is_human_case");
-    t!(test3: "MixedUp CamelCase, with some Spaces" => "mixed_up_camel_case_with_some_spaces");
+    t!(test3: "MixedUP CamelCase, with some Spaces" => "mixed_up_camel_case_with_some_spaces");
     t!(test4: "mixed_up snake_case with some _spaces" => "mixed_up_snake_case_with_some_spaces");
     t!(test5: "kebab-case" => "kebab_case");
     t!(test6: "SHOUTY_SNAKE_CASE" => "shouty_snake_case");
     t!(test7: "snake_case" => "snake_case");
-    t!(test8: "this-contains_ ALLkinds OfWord_Boundaries" => "this_contains_all_kinds_of_word_boundaries");
-    // TODO unicode tests
+    t!(test8: "this-contains_ ALLKinds OfWord_Boundaries" => "this_contains_all_kinds_of_word_boundaries");
+    t!(test9: "XΣXΣ baﬄe" => "xσxς_baﬄe");
+    t!(test10: "XMLHttpRequest" => "xml_http_request");
 }

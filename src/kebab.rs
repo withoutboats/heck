@@ -21,10 +21,7 @@ pub trait KebabCase: ToOwned {
 
 impl KebabCase for str {
     fn to_kebab_case(&self) -> Self::Owned {
-        ::transform(self, |c, s| {
-            s.push('-');
-            s.extend(c.to_lowercase())
-        }, |c, s| s.extend(c.to_lowercase()))
+        ::transform(self, ::lowercase, |s| s.push('-'))
     }
 }
 
@@ -48,5 +45,7 @@ mod tests {
     t!(test5: "kebab-case" => "kebab-case");
     t!(test6: "SHOUTY_SNAKE_CASE" => "shouty-snake-case");
     t!(test7: "snake_case" => "snake-case");
-    t!(test8: "this-contains_ ALLkinds OfWord_Boundaries" => "this-contains-all-kinds-of-word-boundaries");
+    t!(test8: "this-contains_ ALLKinds OfWord_Boundaries" => "this-contains-all-kinds-of-word-boundaries");
+    t!(test9: "XΣXΣ baﬄe" => "xσxς-baﬄe");
+    t!(test10: "XMLHttpRequest" => "xml-http-request");
 }

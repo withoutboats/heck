@@ -22,7 +22,10 @@ pub trait MixedCase: ToOwned {
 
 impl MixedCase for str {
     fn to_mixed_case(&self) -> String {
-        ::transform(self, |c, s| s.extend(c.to_uppercase()), |c, s| s.extend(c.to_lowercase()))
+        ::transform(self, |s, out| {
+            if out.is_empty() { ::lowercase(s, out); }
+            else { ::capitalize(s, out) }
+        }, |_| {})
     }
 }
 
@@ -46,6 +49,8 @@ mod tests {
     t!(test5: "kebab-case" => "kebabCase");
     t!(test6: "SHOUTY_SNAKE_CASE" => "shoutySnakeCase");
     t!(test7: "snake_case" => "snakeCase");
-    t!(test8: "this-contains_ ALLkinds OfWord_Boundaries" => "thisContainsAllKindsOfWordBoundaries");
+    t!(test8: "this-contains_ ALLKinds OfWord_Boundaries" => "thisContainsAllKindsOfWordBoundaries");
+    t!(test9: "XΣXΣ baﬄe" => "xσxςBaﬄe");
+    t!(test10: "XMLHttpRequest" => "xmlHttpRequest");
     // TODO unicode tests
 }

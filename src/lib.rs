@@ -10,13 +10,21 @@
 //! `unicode_segmentation` library, as well as within those words in this manner:
 //! 
 //! 1. All underscore characters are considered word boundaries.
-//! 2. A single uppercase letter (followed by no letters or by lowercase letters)
-//! is considered to be just after a word boundary.
-//! 3. Multiple consecutive uppercase letters are considered to be between two
-//! word boundaries.
+//! 2. If an uppercase character is followed by lowercase letters, a word boundary
+//! is considered to be just prior to that uppercase character.
+//! 3. If multiple uppercase characters are consecutive, they are considered to be
+//! within a single word, except that the last will be part of the next word if it
+//! is followed by lowercase characters (see rule 2).
 //! 
-//! That is, "HelloWorld" is segmented "Hello World" whereas "HELLOworld" is
-//! segmented "HELLO world."
+//! That is, "HelloWorld" is segmented `Hello|World` whereas "XMLHttpRequest" is
+//! segmented `XML|Http|Request`.
+//! 
+//! Characters not within words (such as spaces, punctuations, and underscores)
+//! are not included in the output string except as they are a part of the case
+//! being converted to. Multiple adjacent word boundaries (such as a series of
+//! underscores) are folded into one. ("hello__world" in snake case is therefore
+//! "hello_world", not the exact same string). Leading or trailing word boundary
+//! indicators are dropped, except insofar as CamelCase capitalizes the first word.
 //! 
 //! ### Cases contained in this library:
 //! 
@@ -45,50 +53,101 @@ pub use title::TitleCase;
 
 use unicode_segmentation::UnicodeSegmentation;
 
-fn transform<F, G>(s: &str, word_boundary: F, not_word_boundary: G) -> String
+fn transform<F, G>(s: &str, with_word: F, boundary: G) -> String
 where
-    F: Fn(char, &mut String),
-    G: Fn(char, &mut String),
+    F: Fn(&str, &mut String),
+    G: Fn(&mut String)
 {
+    macro_rules! apply {
+        ($s:ident [ $init:ident .. $next:ident ], $out:ident, $boundary:ident, $with_word:ident, $first_word:ident) => {
+            if !$first_word {
+                $boundary(&mut $out);
+            }
+            $with_word(&$s[$init..$next], &mut $out);
+            $init = $next_i;
+        };
+    }
+    
     let mut out = String::new();
-    let mut after_word_boundary = false;
+    let mut first_word = true;
 
     for word in s.unicode_words() {
-        if out.len() != 0 { after_word_boundary = true; }
-        let mut last_c_was_uppercase = false;
-        let mut multiple_uppercase = false;
+        let mut char_indices = word.char_indices().peekable();
+        let mut init = 0;
+        let mut previous_is_uppercase = false;
 
-        for c in word.chars() {
+        while let Some((i, c)) = char_indices.next() {
+            // Skip underscore characters
             if c == '_' {
-                after_word_boundary = true;
+                if init == i { init += 1; }
                 continue
             }
 
-            if c.is_uppercase() {
-                if out.len() != 0 && !last_c_was_uppercase {
-                    after_word_boundary = true;
+            match char_indices.peek() {
+                Some(&(next_i, next)) if next == '_' => {
+                    if !first_word { boundary(&mut out); }
+                    with_word(&word[init..next_i], &mut out);
+                    first_word = false;
+                    init = next_i;
+                    previous_is_uppercase = c.is_uppercase();
                 }
 
-                if last_c_was_uppercase {
-                    multiple_uppercase = true;
-                }
-                last_c_was_uppercase = true;
-            } else {
-                if multiple_uppercase && !after_word_boundary {
-                    after_word_boundary = true;
+                Some(&(_, next)) if c.is_uppercase() => {
+                    if next.is_lowercase() && previous_is_uppercase {
+                        if !first_word { boundary(&mut out); }
+                        with_word(&word[init..i], &mut out);
+                        first_word = false;
+                        init = i;
+                    }
+                    previous_is_uppercase = true;
                 }
 
-                multiple_uppercase = false;
-                last_c_was_uppercase = false;
+                Some(&(next_i, next)) => {
+                    if next.is_uppercase() {
+                        if !first_word { boundary(&mut out); }
+                        with_word(&word[init..next_i], &mut out);
+                        first_word = false;
+                        init = next_i;
+                    }
+                    previous_is_uppercase = false;
+                }
+
+                None => {
+                    if !first_word { boundary(&mut out); }
+                    with_word(&word[init..], &mut out);
+                    first_word = false;
+                    break;
+                }
             }
-            if after_word_boundary {
-                word_boundary(c, &mut out);
-            } else {
-                not_word_boundary(c, &mut out);
-            }
-            after_word_boundary = false;
         }
     }
 
     out
+}
+
+fn lowercase(s: &str, out: &mut String) {
+    let mut chars = s.chars().peekable();
+    while let Some(c) = chars.next() {
+        if c == 'Σ' && chars.peek().is_none() {
+            out.push('ς');
+        } else {
+            out.extend(c.to_lowercase());
+        }
+    }
+}
+
+fn uppercase(s: &str, out: &mut String ) {
+    for c in s.chars() {
+        out.extend(c.to_uppercase())
+    }
+}
+
+fn capitalize(s: &str, out: &mut String) {
+    let mut char_indices = s.char_indices();
+    if let Some((_, c)) = char_indices.next() {
+        out.extend(c.to_uppercase());
+        if let Some((i, _)) = char_indices.next() {
+            lowercase(&s[i..], out);
+        }
+    }
 }

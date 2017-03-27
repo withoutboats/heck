@@ -37,10 +37,7 @@ impl<T: ShoutySnakeCase> ShoutySnekCase for T {
 
 impl ShoutySnakeCase for str {
     fn to_shouty_snake_case(&self) -> Self::Owned {
-        ::transform(self, |c, s| {
-            s.push('_');
-            s.extend(c.to_uppercase())
-        }, |c, s| s.extend(c.to_uppercase()))
+        ::transform(self, ::uppercase, |s| s.push('_'))
     }
 }
 
@@ -64,6 +61,7 @@ mod tests {
     t!(test5: "kebab-case" => "KEBAB_CASE");
     t!(test6: "SHOUTY_SNAKE_CASE" => "SHOUTY_SNAKE_CASE");
     t!(test7: "snake_case" => "SNAKE_CASE");
-    t!(test8: "this-contains_ ALLkinds OfWord_Boundaries" => "THIS_CONTAINS_ALL_KINDS_OF_WORD_BOUNDARIES");
-    // TODO unicode tests
+    t!(test8: "this-contains_ ALLKinds OfWord_Boundaries" => "THIS_CONTAINS_ALL_KINDS_OF_WORD_BOUNDARIES");
+    t!(test9: "XΣXΣ baﬄe" => "XΣXΣ_BAFFLE");
+    t!(test10: "XMLHttpRequest" => "XML_HTTP_REQUEST");
 }

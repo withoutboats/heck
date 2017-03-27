@@ -22,16 +22,7 @@ pub trait TitleCase: ToOwned {
 
 impl TitleCase for str {
     fn to_title_case(&self) -> String {
-        ::transform(self, |c, s| {
-            s.push(' ');
-            s.extend(c.to_uppercase())
-        }, |c, s| {
-            if s.len() == 0 {
-                s.extend(c.to_uppercase())
-            } else {
-                s.extend(c.to_lowercase())
-            }
-        })
+        ::transform(self, ::capitalize, |s| s.push(' '))
     }
 }
 
@@ -55,6 +46,7 @@ mod tests {
     t!(test5: "kebab-case" => "Kebab Case");
     t!(test6: "SHOUTY_SNAKE_CASE" => "Shouty Snake Case");
     t!(test7: "snake_case" => "Snake Case");
-    t!(test8: "this-contains_ ALLkinds OfWord_Boundaries" => "This Contains All Kinds Of Word Boundaries");
-    // TODO unicode tests
+    t!(test8: "this-contains_ ALLKinds OfWord_Boundaries" => "This Contains All Kinds Of Word Boundaries");
+    t!(test9: "XΣXΣ baﬄe" => "Xσxς Baﬄe");
+    t!(test10: "XMLHttpRequest" => "Xml Http Request");
 }

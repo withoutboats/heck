@@ -22,13 +22,7 @@ pub trait CamelCase: ToOwned {
 
 impl CamelCase for str {
     fn to_camel_case(&self) -> String {
-        ::transform(self, |c, s| s.extend(c.to_uppercase()), |c, s| {
-            if s.len() == 0 {
-                s.extend(c.to_uppercase())
-            } else {
-                s.extend(c.to_lowercase())
-            }
-        })
+        ::transform(self, ::capitalize, |_| {})
     }
 }
 
@@ -52,6 +46,7 @@ mod tests {
     t!(test5: "kebab-case" => "KebabCase");
     t!(test6: "SHOUTY_SNAKE_CASE" => "ShoutySnakeCase");
     t!(test7: "snake_case" => "SnakeCase");
-    t!(test8: "this-contains_ ALLkinds OfWord_Boundaries" => "ThisContainsAllKindsOfWordBoundaries");
-    // TODO unicode tests
+    t!(test8: "this-contains_ ALLKinds OfWord_Boundaries" => "ThisContainsAllKindsOfWordBoundaries");
+    t!(test9: "XΣXΣ baﬄe" => "XσxςBaﬄe");
+    t!(test10: "XMLHttpRequest" => "XmlHttpRequest");
 }
