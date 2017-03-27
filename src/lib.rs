@@ -58,16 +58,6 @@ where
     F: Fn(&str, &mut String),
     G: Fn(&mut String)
 {
-    macro_rules! apply {
-        ($s:ident [ $init:ident .. $next:ident ], $out:ident, $boundary:ident, $with_word:ident, $first_word:ident) => {
-            if !$first_word {
-                $boundary(&mut $out);
-            }
-            $with_word(&$s[$init..$next], &mut $out);
-            $init = $next_i;
-        };
-    }
-    
     let mut out = String::new();
     let mut first_word = true;
 
