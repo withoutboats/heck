@@ -73,41 +73,39 @@ where
                 continue
             }
 
-            match char_indices.peek() {
-                Some(&(next_i, next)) if next == '_' => {
+            if let Some(&(next_i, next)) = char_indices.peek() {
+                let this_is_uppercase = c.is_uppercase();
+                let next_is_uppercase = next.is_uppercase();
+
+                // Word boundary after if next is underscore or this is
+                // lowercase and next is uppercase
+                if next == '_' || (!this_is_uppercase && next_is_uppercase) {
                     if !first_word { boundary(&mut out); }
                     with_word(&word[init..next_i], &mut out);
                     first_word = false;
                     init = next_i;
-                    previous_is_uppercase = c.is_uppercase();
-                }
-
-                Some(&(_, next)) if c.is_uppercase() => {
-                    if next.is_lowercase() && previous_is_uppercase {
-                        if !first_word { boundary(&mut out); }
-                        with_word(&word[init..i], &mut out);
-                        first_word = false;
-                        init = i;
-                    }
-                    previous_is_uppercase = true;
-                }
-
-                Some(&(next_i, next)) => {
-                    if next.is_uppercase() {
-                        if !first_word { boundary(&mut out); }
-                        with_word(&word[init..next_i], &mut out);
-                        first_word = false;
-                        init = next_i;
-                    }
                     previous_is_uppercase = false;
-                }
-
-                None => {
+                
+                // Otherwise if this and previous are uppercase and next
+                // is not, word boundary before
+                } else if previous_is_uppercase && this_is_uppercase && !next_is_uppercase {
                     if !first_word { boundary(&mut out); }
-                    with_word(&word[init..], &mut out);
-                    first_word = false;
-                    break;
+                    else { first_word = false; }
+                    with_word(&word[init..i], &mut out);
+                    init = i;
+                    previous_is_uppercase = true;
+
+                // Otherwise no word boundary, just track if previous is
+                // uppercase
+                } else {
+                    previous_is_uppercase = this_is_uppercase;
                 }
+            } else {
+                // Collect trailing characters as a word
+                if !first_word { boundary(&mut out); }
+                else { first_word = false; }
+                with_word(&word[init..], &mut out);
+                break;
             }
         }
     }

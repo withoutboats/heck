@@ -41,7 +41,7 @@ mod tests {
 
     t!(test1: "CamelCase" => "CamelCase");
     t!(test2: "This is Human case." => "ThisIsHumanCase");
-    t!(test3: "MixedUP CamelCase, with some Spaces" => "MixedUpCamelCaseWithSomeSpaces");
+    t!(test3: "MixedUP_CamelCase, with some Spaces" => "MixedUpCamelCaseWithSomeSpaces");
     t!(test4: "mixed_up_ snake_case, with some _spaces" => "MixedUpSnakeCaseWithSomeSpaces");
     t!(test5: "kebab-case" => "KebabCase");
     t!(test6: "SHOUTY_SNAKE_CASE" => "ShoutySnakeCase");
