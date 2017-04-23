@@ -26,7 +26,7 @@ pub trait SnekCase: ToOwned {
     fn to_snek_case(&self) -> Self::Owned;
 }
 
-impl<T: SnakeCase> SnekCase for T {
+impl<T: ?Sized + SnakeCase> SnekCase for T {
     fn to_snek_case(&self) -> Self::Owned {
         self.to_snake_case()
     }

@@ -28,7 +28,7 @@ pub trait ShoutySnekCase: ToOwned {
     fn TO_SHOUTY_SNEK_CASE(&self) -> Self::Owned;
 }
 
-impl<T: ShoutySnakeCase> ShoutySnekCase for T {
+impl<T: ?Sized + ShoutySnakeCase> ShoutySnekCase for T {
     fn TO_SHOUTY_SNEK_CASE(&self) -> Self::Owned {
         self.to_shouty_snake_case()
     }
