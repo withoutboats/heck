@@ -11,4 +11,4 @@ keywords = ["string", "case", "camel", "snake", "unicode"]
 readme = "README.md"
 
 [dependencies]
-unicode-segmentation = "1.1.0"
+unicode-segmentation = "1.2.0"
