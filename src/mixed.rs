@@ -22,7 +22,7 @@ pub trait MixedCase: ToOwned {
 
 impl MixedCase for str {
     fn to_mixed_case(&self) -> String {
-        ::transform(self, |s, out| {
+        ::transform(self, |s, out: &mut String| {
             if out.is_empty() { ::lowercase(s, out); }
             else { ::capitalize(s, out) }
         }, |_| {})

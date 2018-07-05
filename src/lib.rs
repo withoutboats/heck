@@ -53,10 +53,14 @@ pub use title::TitleCase;
 
 use unicode_segmentation::UnicodeSegmentation;
 
-fn transform<F, G>(s: &str, with_word: F, boundary: G) -> String
+/// Splits the input string into words.
+///
+/// Call `with_word` on each of these, with a mutable reference to the output as argument.
+/// Also calls `boundary` between every two words.
+pub fn transform<Out: Default, F, G>(s: &str, with_word: F, boundary: G) -> Out
 where
-    F: Fn(&str, &mut String),
-    G: Fn(&mut String)
+    F: Fn(&str, &mut Out),
+    G: Fn(&mut Out)
 {
 
     /// Tracks the current 'mode' of the transformation algorithm as it scans the input string.
@@ -75,7 +79,7 @@ where
         Uppercase,
     }
 
-    let mut out = String::new();
+    let mut out = Default::default();
     let mut first_word = true;
 
     for word in s.unicode_words() {
@@ -162,4 +166,37 @@ fn capitalize(s: &str, out: &mut String) {
             lowercase(&s[i..], out);
         }
     }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::transform;
+
+    macro_rules! t {
+        ($t:ident : $s1:expr => $s2:expr) => {
+            #[test]
+            fn $t() {
+                let res = transform($s1,
+                    |word, out: &mut Vec<_>| out.push(word.to_string()),
+                    |_out| ()
+                    );
+                assert_eq!(res, $s2)
+            }
+        }
+    }
+
+    t!(test1: "CamelCase" => vec!["Camel", "Case"]);
+    t!(test2: "This is Human case." => vec!["This", "is", "Human", "case"]);
+    t!(test3: "MixedUP CamelCase, with some Spaces" =>
+        vec!["Mixed", "UP", "Camel", "Case", "with", "some", "Spaces"]);
+    t!(test4: "mixed_up_ snake_case, with some _spaces" =>
+        vec!["mixed", "up", "snake", "case", "with", "some", "spaces"]);
+    t!(test5: "kebab-case" => vec!["kebab", "case"]);
+    t!(test6: "SHOUTY_SNAKE_CASE" => vec!["SHOUTY", "SNAKE", "CASE"]);
+    t!(test7: "snake_case" => vec!["snake", "case"]);
+    t!(test8: "this-contains_ ALLKinds OfWord_Boundaries" =>
+        vec!["this", "contains", "ALL", "Kinds", "Of", "Word", "Boundaries"]);
+    t!(test9: "XΣXΣ baﬄe" => vec!["XΣXΣ", "baﬄe"]);
+    t!(test10: "XMLHttpRequest" => vec!["XML", "Http", "Request"]);
+    // TODO unicode tests
 }
