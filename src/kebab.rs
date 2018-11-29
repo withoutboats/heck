@@ -48,4 +48,6 @@ mod tests {
     t!(test8: "this-contains_ ALLKinds OfWord_Boundaries" => "this-contains-all-kinds-of-word-boundaries");
     t!(test9: "XΣXΣ baﬄe" => "xσxς-baﬄe");
     t!(test10: "XMLHttpRequest" => "xml-http-request");
+    t!(test11: "白い悪魔が黒い天国と出会い歴史は紡がれる" => "白い悪魔が黒い天国と出会い歴史は紡がれる");
+    t!(test12: "汉语的标题" => "汉语的标题");
 }

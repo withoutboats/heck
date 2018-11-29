@@ -77,6 +77,7 @@ where
 
     let mut out = String::new();
     let mut first_word = true;
+    let mut can_link_last = false;
 
     for word in s.unicode_words() {
         let mut char_indices = word.char_indices().peekable();
@@ -108,6 +109,7 @@ where
                     if !first_word { boundary(&mut out); }
                     with_word(&word[init..next_i], &mut out);
                     first_word = false;
+                    can_link_last = can_link(word);
                     init = next_i;
                     mode = WordMode::Boundary;
 
@@ -116,6 +118,7 @@ where
                 } else if mode == WordMode::Uppercase && c.is_uppercase() && next.is_lowercase() {
                     if !first_word { boundary(&mut out); }
                     else { first_word = false; }
+                    can_link_last = can_link(word);
                     with_word(&word[init..i], &mut out);
                     init = i;
                     mode = WordMode::Boundary;
@@ -126,8 +129,13 @@ where
                 }
             } else {
                 // Collect trailing characters as a word
-                if !first_word { boundary(&mut out); }
-                else { first_word = false; }
+                let can_link_next = can_link(word);
+                if !first_word {
+                    if !(can_link_last && can_link_next) {
+                        boundary(&mut out)
+                    }
+                } else { first_word = false; }
+                can_link_last = can_link_next;
                 with_word(&word[init..], &mut out);
                 break;
             }
@@ -136,6 +144,26 @@ where
 
     out
 }
+
+fn can_link(word: &str) -> bool {
+    word.chars().map(u32::from)
+        .all(|c| {
+              in_range(0x4E00, 0x9FFF, c)   ||   //CJK Unified Ideographs
+              in_range(0x3400, 0x4DFF, c)   ||   //CJK Unified Ideographs Extension A
+              in_range(0x20000, 0x2A6DF, c) ||   //CJK Unified Ideographs Extension B
+              in_range(0x2A700, 0x2EBEF, c) ||   //CJK Unified Ideographs Extensions C, D, E & F
+              in_range(0x3300, 0x33FF, c)   ||   //CJK Compatibility
+              in_range(0xFE30, 0xFE4F, c)   ||   //CJK Compatibility Forms
+              in_range(0xF900, 0xFAFF, c)   ||   //CJK Compatibility Ideographs
+              in_range(0x2F800, 0x2FA1F, c) ||   //CJK Compatibility Ideographs Supplement
+              in_range(0x303F, 0x319F, c)        //Hiragana, Katakan, Bopomofo, Hangul & Kanboun
+        })
+}
+
+fn in_range(min: u32,max: u32, val: u32) -> bool {
+    val >= min && val <= max
+}
+
 
 fn lowercase(s: &str, out: &mut String) {
     let mut chars = s.chars().peekable();
