@@ -1,4 +1,4 @@
-/// This trait defines a camel case conversion.
+/// This trait defines a snake case conversion.
 ///
 /// In snake_case, word boundaries are indicated by underscores.
 ///
