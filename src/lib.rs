@@ -34,12 +34,14 @@
 //! 4. SHOUTY_SNAKE_CASE
 //! 5. mixedCase
 //! 6. Title Case
+//! 7. SHOUTY-KEBAB-CASE
 #![deny(missing_docs)]
 extern crate unicode_segmentation;
 
 mod camel;
 mod kebab;
 mod mixed;
+mod shouty_kebab;
 mod shouty_snake;
 mod snake;
 mod title;
@@ -47,6 +49,7 @@ mod title;
 pub use camel::CamelCase;
 pub use kebab::KebabCase;
 pub use mixed::MixedCase;
+pub use shouty_kebab::ShoutyKebabCase;
 pub use shouty_snake::{ShoutySnakeCase, ShoutySnekCase};
 pub use snake::{SnakeCase, SnekCase};
 pub use title::TitleCase;
