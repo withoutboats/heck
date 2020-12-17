@@ -6,14 +6,11 @@
 /// ## Example:
 ///
 /// ```rust
-/// extern crate heck;
-/// fn main() {
+/// # extern crate heck;
+/// use heck::ShoutySnakeCase;
 ///     
-///     use heck::ShoutySnakeCase;
-///
-///     let sentence = "That world is growing in this minute.";
-///     assert_eq!(sentence.to_shouty_snake_case(), "THAT_WORLD_IS_GROWING_IN_THIS_MINUTE");
-/// }
+/// let sentence = "That world is growing in this minute.";
+/// assert_eq!(sentence.to_shouty_snake_case(), "THAT_WORLD_IS_GROWING_IN_THIS_MINUTE");
 /// ```
 pub trait ShoutySnakeCase: ToOwned {
     /// Convert this type to shouty snake case.

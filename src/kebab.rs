@@ -5,14 +5,11 @@
 /// ## Example:
 ///
 /// ```rust
-/// extern crate heck;
-/// fn main() {
-///     
-///     use heck::KebabCase;
+/// # extern crate heck;
+/// use heck::KebabCase;
 ///
-///     let sentence = "We are going to inherit the earth.";
-///     assert_eq!(sentence.to_kebab_case(), "we-are-going-to-inherit-the-earth");
-/// }
+/// let sentence = "We are going to inherit the earth.";
+/// assert_eq!(sentence.to_kebab_case(), "we-are-going-to-inherit-the-earth");
 /// ```
 pub trait KebabCase: ToOwned {
     /// Convert this type to kebab case.

@@ -6,14 +6,11 @@
 /// ## Example:
 ///
 /// ```rust
-/// extern crate heck;
-/// fn main() {
+/// # extern crate heck;
+/// use heck::ShoutyKebabCase;
 ///
-///     use heck::ShoutyKebabCase;
-///
-///     let sentence = "We are going to inherit the earth.";
-///     assert_eq!(sentence.to_shouty_kebab_case(), "WE-ARE-GOING-TO-INHERIT-THE-EARTH");
-/// }
+/// let sentence = "We are going to inherit the earth.";
+/// assert_eq!(sentence.to_shouty_kebab_case(), "WE-ARE-GOING-TO-INHERIT-THE-EARTH");
 /// ```
 pub trait ShoutyKebabCase: ToOwned {
     /// Convert this type to shouty kebab case.

@@ -6,14 +6,11 @@
 /// ## Example:
 ///
 /// ```rust
-/// extern crate heck;
-/// fn main() {
-///     
-///     use heck::CamelCase;
+/// # extern crate heck;
+/// use heck::CamelCase;
 ///
-///     let sentence = "We are not in the least afraid of ruins.";
-///     assert_eq!(sentence.to_camel_case(), "WeAreNotInTheLeastAfraidOfRuins");
-/// }
+/// let sentence = "We are not in the least afraid of ruins.";
+/// assert_eq!(sentence.to_camel_case(), "WeAreNotInTheLeastAfraidOfRuins");
 /// ```
 pub trait CamelCase: ToOwned {
     /// Convert this type to camel case.

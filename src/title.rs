@@ -6,14 +6,11 @@
 /// ## Example:
 ///
 /// ```rust
-/// extern crate heck;
-/// fn main() {
-///     
-///     use heck::TitleCase;
+/// # extern crate heck;
+/// use heck::TitleCase;
 ///
-///     let sentence = "We have always lived in slums and holes in the wall.";
-///     assert_eq!(sentence.to_title_case(), "We Have Always Lived In Slums And Holes In The Wall");
-/// }
+/// let sentence = "We have always lived in slums and holes in the wall.";
+/// assert_eq!(sentence.to_title_case(), "We Have Always Lived In Slums And Holes In The Wall");
 /// ```
 pub trait TitleCase: ToOwned {
     /// Convert this type to title case.

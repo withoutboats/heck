@@ -5,14 +5,11 @@
 /// ## Example:
 ///
 /// ```rust
-/// extern crate heck;
-/// fn main() {
+/// # extern crate heck;
+/// use heck::SnakeCase;
 ///
-///     use heck::SnakeCase;
-///
-///     let sentence = "We carry a new world here, in our hearts.";
-///     assert_eq!(sentence.to_snake_case(), "we_carry_a_new_world_here_in_our_hearts");
-/// }
+/// let sentence = "We carry a new world here, in our hearts.";
+/// assert_eq!(sentence.to_snake_case(), "we_carry_a_new_world_here_in_our_hearts");
 /// ```
 pub trait SnakeCase: ToOwned {
     /// Convert this type to snake case.

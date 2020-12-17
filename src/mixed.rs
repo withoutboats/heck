@@ -6,14 +6,11 @@
 /// ## Example:
 ///
 /// ```rust
-/// extern crate heck;
-/// fn main() {
-///     
-///     use heck::MixedCase;
+/// # extern crate heck;
+/// use heck::MixedCase;
 ///
-///     let sentence = "It is we who built these palaces and cities.";
-///     assert_eq!(sentence.to_mixed_case(), "itIsWeWhoBuiltThesePalacesAndCities");
-/// }
+/// let sentence = "It is we who built these palaces and cities.";
+/// assert_eq!(sentence.to_mixed_case(), "itIsWeWhoBuiltThesePalacesAndCities");
 /// ```
 pub trait MixedCase: ToOwned {
     /// Convert this type to mixed case.
