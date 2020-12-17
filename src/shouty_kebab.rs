@@ -1,3 +1,5 @@
+use crate::{transform, uppercase};
+
 /// This trait defines a shouty kebab case conversion.
 ///
 /// In SHOUTY-KEBAB-CASE, word boundaries are indicated by hyphens and all
@@ -19,7 +21,7 @@ pub trait ShoutyKebabCase: ToOwned {
 
 impl ShoutyKebabCase for str {
     fn to_shouty_kebab_case(&self) -> Self::Owned {
-        ::transform(self, ::uppercase, |s| s.push('-'))
+        transform(self, uppercase, |s| s.push('-'))
     }
 }
 

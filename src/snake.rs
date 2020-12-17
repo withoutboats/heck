@@ -1,3 +1,5 @@
+use crate::{lowercase, transform};
+
 /// This trait defines a snake case conversion.
 ///
 /// In snake_case, word boundaries are indicated by underscores.
@@ -31,7 +33,7 @@ impl<T: ?Sized + SnakeCase> SnekCase for T {
 
 impl SnakeCase for str {
     fn to_snake_case(&self) -> String {
-        ::transform(self, ::lowercase, |s| s.push('_'))
+        transform(self, lowercase, |s| s.push('_'))
     }
 }
 

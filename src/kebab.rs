@@ -1,3 +1,5 @@
+use crate::{lowercase, transform};
+
 /// This trait defines a kebab case conversion.
 ///
 /// In kebab-case, word boundaries are indicated by hyphens.
@@ -18,7 +20,7 @@ pub trait KebabCase: ToOwned {
 
 impl KebabCase for str {
     fn to_kebab_case(&self) -> Self::Owned {
-        ::transform(self, ::lowercase, |s| s.push('-'))
+        transform(self, lowercase, |s| s.push('-'))
     }
 }
 

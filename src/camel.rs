@@ -1,3 +1,5 @@
+use crate::{capitalize, transform};
+
 /// This trait defines a camel case conversion.
 ///
 /// In CamelCase, word boundaries are indicated by capital letters, including
@@ -19,7 +21,7 @@ pub trait CamelCase: ToOwned {
 
 impl CamelCase for str {
     fn to_camel_case(&self) -> String {
-        ::transform(self, ::capitalize, |_| {})
+        transform(self, capitalize, |_| {})
     }
 }
 

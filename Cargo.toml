@@ -2,6 +2,7 @@
 authors = ["Without Boats <woboats@gmail.com>"]
 name = "heck"
 version = "0.3.1"
+edition = "2018"
 license = "MIT OR Apache-2.0"
 description = "heck is a case conversion library."
 homepage = "https://github.com/withoutboats/heck"

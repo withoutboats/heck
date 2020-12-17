@@ -1,3 +1,5 @@
+use crate::{capitalize, transform};
+
 /// This trait defines a title case conversion.
 ///
 /// In Title Case, word boundaries are indicated by spaces, and every word is
@@ -19,7 +21,7 @@ pub trait TitleCase: ToOwned {
 
 impl TitleCase for str {
     fn to_title_case(&self) -> String {
-        ::transform(self, ::capitalize, |s| s.push(' '))
+        transform(self, capitalize, |s| s.push(' '))
     }
 }
 

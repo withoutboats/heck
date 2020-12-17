@@ -1,3 +1,5 @@
+use crate::{capitalize, lowercase, transform};
+
 /// This trait defines a mixed case conversion.
 ///
 /// In mixedCase, word boundaries are indicated by capital letters, excepting
@@ -19,9 +21,9 @@ pub trait MixedCase: ToOwned {
 
 impl MixedCase for str {
     fn to_mixed_case(&self) -> String {
-        ::transform(self, |s, out| {
-            if out.is_empty() { ::lowercase(s, out); }
-            else { ::capitalize(s, out) }
+        transform(self, |s, out| {
+            if out.is_empty() { lowercase(s, out); }
+            else { capitalize(s, out) }
         }, |_| {})
     }
 }
