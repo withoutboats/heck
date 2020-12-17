@@ -45,13 +45,13 @@ mod shouty_snake;
 mod snake;
 mod title;
 
-pub use self::camel::CamelCase;
-pub use self::kebab::KebabCase;
-pub use self::mixed::MixedCase;
-pub use self::shouty_kebab::ShoutyKebabCase;
-pub use self::shouty_snake::{ShoutySnakeCase, ShoutySnekCase};
-pub use self::snake::{SnakeCase, SnekCase};
-pub use self::title::TitleCase;
+pub use camel::CamelCase;
+pub use kebab::KebabCase;
+pub use mixed::MixedCase;
+pub use shouty_kebab::ShoutyKebabCase;
+pub use shouty_snake::{ShoutySnakeCase, ShoutySnekCase};
+pub use snake::{SnakeCase, SnekCase};
+pub use title::TitleCase;
 
 use unicode_segmentation::UnicodeSegmentation;
 
