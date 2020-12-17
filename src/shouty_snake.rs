@@ -8,7 +8,6 @@ use crate::{transform, uppercase};
 /// ## Example:
 ///
 /// ```rust
-/// # extern crate heck;
 /// use heck::ShoutySnakeCase;
 ///     
 /// let sentence = "That world is growing in this minute.";

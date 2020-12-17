@@ -7,7 +7,6 @@ use crate::{lowercase, transform};
 /// ## Example:
 ///
 /// ```rust
-/// # extern crate heck;
 /// use heck::SnakeCase;
 ///
 /// let sentence = "We carry a new world here, in our hearts.";

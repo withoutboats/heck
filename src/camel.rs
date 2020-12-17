@@ -8,7 +8,6 @@ use crate::{capitalize, transform};
 /// ## Example:
 ///
 /// ```rust
-/// # extern crate heck;
 /// use heck::CamelCase;
 ///
 /// let sentence = "We are not in the least afraid of ruins.";
