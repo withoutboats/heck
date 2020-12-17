@@ -36,7 +36,7 @@ indicators are dropped, except insofar as CamelCase capitalizes the first word.
 4. SHOUTY_SNAKE_CASE
 5. mixedCase
 6. Title Case
-
+7. SHOUTY-KEBAB-CASE
 
 ### Contributing
 
