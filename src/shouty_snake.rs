@@ -32,7 +32,6 @@ impl<T: ?Sized + ShoutySnakeCase> ShoutySnekCase for T {
     }
 }
 
-
 impl ShoutySnakeCase for str {
     fn to_shouty_snake_case(&self) -> Self::Owned {
         transform(self, uppercase, |s| s.push('_'))
@@ -49,7 +48,7 @@ mod tests {
             fn $t() {
                 assert_eq!($s1.to_shouty_snake_case(), $s2)
             }
-        }
+        };
     }
 
     t!(test1: "CamelCase" => "CAMEL_CASE");

@@ -58,9 +58,8 @@ use unicode_segmentation::UnicodeSegmentation;
 fn transform<F, G>(s: &str, with_word: F, boundary: G) -> String
 where
     F: Fn(&str, &mut String),
-    G: Fn(&mut String)
+    G: Fn(&mut String),
 {
-
     /// Tracks the current 'mode' of the transformation algorithm as it scans the input string.
     ///
     /// The mode is a tri-state which tracks the case of the last cased character of the current
@@ -88,12 +87,13 @@ where
         while let Some((i, c)) = char_indices.next() {
             // Skip underscore characters
             if c == '_' {
-                if init == i { init += 1; }
-                continue
+                if init == i {
+                    init += 1;
+                }
+                continue;
             }
 
             if let Some(&(next_i, next)) = char_indices.peek() {
-
                 // The mode including the current character, assuming the current character does
                 // not result in a word boundary.
                 let next_mode = if c.is_lowercase() {
@@ -107,7 +107,9 @@ where
                 // Word boundary after if next is underscore or current is
                 // not uppercase and next is uppercase
                 if next == '_' || (next_mode == WordMode::Lowercase && next.is_uppercase()) {
-                    if !first_word { boundary(&mut out); }
+                    if !first_word {
+                        boundary(&mut out);
+                    }
                     with_word(&word[init..next_i], &mut out);
                     first_word = false;
                     init = next_i;
@@ -116,8 +118,11 @@ where
                 // Otherwise if current and previous are uppercase and next
                 // is lowercase, word boundary before
                 } else if mode == WordMode::Uppercase && c.is_uppercase() && next.is_lowercase() {
-                    if !first_word { boundary(&mut out); }
-                    else { first_word = false; }
+                    if !first_word {
+                        boundary(&mut out);
+                    } else {
+                        first_word = false;
+                    }
                     with_word(&word[init..i], &mut out);
                     init = i;
                     mode = WordMode::Boundary;
@@ -128,8 +133,11 @@ where
                 }
             } else {
                 // Collect trailing characters as a word
-                if !first_word { boundary(&mut out); }
-                else { first_word = false; }
+                if !first_word {
+                    boundary(&mut out);
+                } else {
+                    first_word = false;
+                }
                 with_word(&word[init..], &mut out);
                 break;
             }
@@ -150,7 +158,7 @@ fn lowercase(s: &str, out: &mut String) {
     }
 }
 
-fn uppercase(s: &str, out: &mut String ) {
+fn uppercase(s: &str, out: &mut String) {
     for c in s.chars() {
         out.extend(c.to_uppercase())
     }

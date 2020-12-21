@@ -46,7 +46,7 @@ mod tests {
             fn $t() {
                 assert_eq!($s1.to_snake_case(), $s2)
             }
-        }
+        };
     }
 
     t!(test1: "CamelCase" => "camel_case");

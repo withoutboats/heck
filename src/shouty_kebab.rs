@@ -34,7 +34,7 @@ mod tests {
             fn $t() {
                 assert_eq!($s1.to_shouty_kebab_case(), $s2)
             }
-        }
+        };
     }
 
     t!(test1: "CamelCase" => "CAMEL-CASE");
