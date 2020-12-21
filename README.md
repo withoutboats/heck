@@ -28,7 +28,7 @@ underscores) are folded into one. ("hello__world" in snake case is therefore
 "hello_world", not the exact same string). Leading or trailing word boundary
 indicators are dropped, except insofar as CamelCase capitalizes the first word.
 
-### Cases contained in this library:
+## Cases contained in this library:
 
 1. CamelCase
 2. snake_case
@@ -38,7 +38,7 @@ indicators are dropped, except insofar as CamelCase capitalizes the first word.
 6. Title Case
 7. SHOUTY-KEBAB-CASE
 
-### Contributing
+## Contributing
 
 PRs of additional well-established cases welcome.
 
@@ -48,7 +48,14 @@ would prefer **not** to receive PRs to make this behavior more configurable.
 
 Bug reports & fixes always welcome. :-)
 
-### License
+## MSRV
+
+The minimum supported Rust version for this crate is 1.32.0. This may change in
+minor or patch releases, but we probably won't ever require a very recent
+version. If you would like to have a stronger guarantee than that, please open
+an issue.
+
+## License
 
 heck is distributed under the terms of both the MIT license and the
 Apache License (Version 2.0).
