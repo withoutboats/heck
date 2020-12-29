@@ -38,6 +38,7 @@
 //! 6. Title Case
 //! 7. SHOUTY-KEBAB-CASE
 #![deny(missing_docs)]
+#![forbid(unsafe_code)]
 
 mod camel;
 mod kebab;
