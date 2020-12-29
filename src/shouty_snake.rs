@@ -8,31 +8,31 @@ use crate::{transform, uppercase};
 /// ## Example:
 ///
 /// ```rust
-/// use heck::ShoutySnakeCase;
-///     
+/// use heck::ToShoutySnakeCase;
+///
 /// let sentence = "That world is growing in this minute.";
 /// assert_eq!(sentence.to_shouty_snake_case(), "THAT_WORLD_IS_GROWING_IN_THIS_MINUTE");
 /// ```
-pub trait ShoutySnakeCase: ToOwned {
+pub trait ToShoutySnakeCase: ToOwned {
     /// Convert this type to shouty snake case.
     fn to_shouty_snake_case(&self) -> Self::Owned;
 }
 
-/// Oh heck, ShoutySnekCase is an alias for ShoutySnakeCase. See ShoutySnakeCase
-/// for more documentation.
-pub trait ShoutySnekCase: ToOwned {
+/// Oh heck, ToShoutySnekCase is an alias for ToShoutySnakeCase. See
+/// ToShoutySnakeCase for more documentation.
+pub trait ToShoutySnekCase: ToOwned {
     /// CONVERT THIS TYPE TO SNEK CASE.
     #[allow(non_snake_case)]
     fn TO_SHOUTY_SNEK_CASE(&self) -> Self::Owned;
 }
 
-impl<T: ?Sized + ShoutySnakeCase> ShoutySnekCase for T {
+impl<T: ?Sized + ToShoutySnakeCase> ToShoutySnekCase for T {
     fn TO_SHOUTY_SNEK_CASE(&self) -> Self::Owned {
         self.to_shouty_snake_case()
     }
 }
 
-impl ShoutySnakeCase for str {
+impl ToShoutySnakeCase for str {
     fn to_shouty_snake_case(&self) -> Self::Owned {
         transform(self, uppercase, |s| s.push('_'))
     }
@@ -40,7 +40,7 @@ impl ShoutySnakeCase for str {
 
 #[cfg(test)]
 mod tests {
-    use super::ShoutySnakeCase;
+    use super::ToShoutySnakeCase;
 
     macro_rules! t {
         ($t:ident : $s1:expr => $s2:expr) => {

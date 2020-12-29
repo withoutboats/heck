@@ -7,17 +7,17 @@ use crate::{lowercase, transform};
 /// ## Example:
 ///
 /// ```rust
-/// use heck::KebabCase;
+/// use heck::ToKebabCase;
 ///
 /// let sentence = "We are going to inherit the earth.";
 /// assert_eq!(sentence.to_kebab_case(), "we-are-going-to-inherit-the-earth");
 /// ```
-pub trait KebabCase: ToOwned {
+pub trait ToKebabCase: ToOwned {
     /// Convert this type to kebab case.
     fn to_kebab_case(&self) -> Self::Owned;
 }
 
-impl KebabCase for str {
+impl ToKebabCase for str {
     fn to_kebab_case(&self) -> Self::Owned {
         transform(self, lowercase, |s| s.push('-'))
     }
@@ -25,7 +25,7 @@ impl KebabCase for str {
 
 #[cfg(test)]
 mod tests {
-    use super::KebabCase;
+    use super::ToKebabCase;
 
     macro_rules! t {
         ($t:ident : $s1:expr => $s2:expr) => {

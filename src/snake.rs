@@ -7,30 +7,30 @@ use crate::{lowercase, transform};
 /// ## Example:
 ///
 /// ```rust
-/// use heck::SnakeCase;
+/// use heck::ToSnakeCase;
 ///
 /// let sentence = "We carry a new world here, in our hearts.";
 /// assert_eq!(sentence.to_snake_case(), "we_carry_a_new_world_here_in_our_hearts");
 /// ```
-pub trait SnakeCase: ToOwned {
+pub trait ToSnakeCase: ToOwned {
     /// Convert this type to snake case.
     fn to_snake_case(&self) -> Self::Owned;
 }
 
-/// Oh heck, SnekCase is an alias for SnakeCase. See SnakeCase for
+/// Oh heck, SnekCase is an alias for ToSnakeCase. See ToSnakeCase for
 /// more documentation.
-pub trait SnekCase: ToOwned {
+pub trait ToSnekCase: ToOwned {
     /// Convert this type to snek case.
     fn to_snek_case(&self) -> Self::Owned;
 }
 
-impl<T: ?Sized + SnakeCase> SnekCase for T {
+impl<T: ?Sized + ToSnakeCase> ToSnekCase for T {
     fn to_snek_case(&self) -> Self::Owned {
         self.to_snake_case()
     }
 }
 
-impl SnakeCase for str {
+impl ToSnakeCase for str {
     fn to_snake_case(&self) -> String {
         transform(self, lowercase, |s| s.push('_'))
     }
@@ -38,7 +38,7 @@ impl SnakeCase for str {
 
 #[cfg(test)]
 mod tests {
-    use super::SnakeCase;
+    use super::ToSnakeCase;
 
     macro_rules! t {
         ($t:ident : $s1:expr => $s2:expr) => {

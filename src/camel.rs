@@ -8,17 +8,17 @@ use crate::{capitalize, transform};
 /// ## Example:
 ///
 /// ```rust
-/// use heck::CamelCase;
+/// use heck::ToCamelCase;
 ///
 /// let sentence = "We are not in the least afraid of ruins.";
 /// assert_eq!(sentence.to_camel_case(), "WeAreNotInTheLeastAfraidOfRuins");
 /// ```
-pub trait CamelCase: ToOwned {
+pub trait ToCamelCase: ToOwned {
     /// Convert this type to camel case.
     fn to_camel_case(&self) -> Self::Owned;
 }
 
-impl CamelCase for str {
+impl ToCamelCase for str {
     fn to_camel_case(&self) -> String {
         transform(self, capitalize, |_| {})
     }
@@ -26,7 +26,7 @@ impl CamelCase for str {
 
 #[cfg(test)]
 mod tests {
-    use super::CamelCase;
+    use super::ToCamelCase;
 
     macro_rules! t {
         ($t:ident : $s1:expr => $s2:expr) => {

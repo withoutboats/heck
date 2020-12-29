@@ -8,17 +8,17 @@ use crate::{transform, uppercase};
 /// ## Example:
 ///
 /// ```rust
-/// use heck::ShoutyKebabCase;
+/// use heck::ToShoutyKebabCase;
 ///
 /// let sentence = "We are going to inherit the earth.";
 /// assert_eq!(sentence.to_shouty_kebab_case(), "WE-ARE-GOING-TO-INHERIT-THE-EARTH");
 /// ```
-pub trait ShoutyKebabCase: ToOwned {
+pub trait ToShoutyKebabCase: ToOwned {
     /// Convert this type to shouty kebab case.
     fn to_shouty_kebab_case(&self) -> Self::Owned;
 }
 
-impl ShoutyKebabCase for str {
+impl ToShoutyKebabCase for str {
     fn to_shouty_kebab_case(&self) -> Self::Owned {
         transform(self, uppercase, |s| s.push('-'))
     }
@@ -26,7 +26,7 @@ impl ShoutyKebabCase for str {
 
 #[cfg(test)]
 mod tests {
-    use super::ShoutyKebabCase;
+    use super::ToShoutyKebabCase;
 
     macro_rules! t {
         ($t:ident : $s1:expr => $s2:expr) => {

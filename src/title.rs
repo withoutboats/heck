@@ -8,17 +8,17 @@ use crate::{capitalize, transform};
 /// ## Example:
 ///
 /// ```rust
-/// use heck::TitleCase;
+/// use heck::ToTitleCase;
 ///
 /// let sentence = "We have always lived in slums and holes in the wall.";
 /// assert_eq!(sentence.to_title_case(), "We Have Always Lived In Slums And Holes In The Wall");
 /// ```
-pub trait TitleCase: ToOwned {
+pub trait ToTitleCase: ToOwned {
     /// Convert this type to title case.
     fn to_title_case(&self) -> Self::Owned;
 }
 
-impl TitleCase for str {
+impl ToTitleCase for str {
     fn to_title_case(&self) -> String {
         transform(self, capitalize, |s| s.push(' '))
     }
@@ -26,7 +26,7 @@ impl TitleCase for str {
 
 #[cfg(test)]
 mod tests {
-    use super::TitleCase;
+    use super::ToTitleCase;
 
     macro_rules! t {
         ($t:ident : $s1:expr => $s2:expr) => {

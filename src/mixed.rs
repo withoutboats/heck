@@ -8,17 +8,17 @@ use crate::{capitalize, lowercase, transform};
 /// ## Example:
 ///
 /// ```rust
-/// use heck::MixedCase;
+/// use heck::ToMixedCase;
 ///
 /// let sentence = "It is we who built these palaces and cities.";
 /// assert_eq!(sentence.to_mixed_case(), "itIsWeWhoBuiltThesePalacesAndCities");
 /// ```
-pub trait MixedCase: ToOwned {
+pub trait ToMixedCase: ToOwned {
     /// Convert this type to mixed case.
     fn to_mixed_case(&self) -> Self::Owned;
 }
 
-impl MixedCase for str {
+impl ToMixedCase for str {
     fn to_mixed_case(&self) -> String {
         transform(
             self,
@@ -36,7 +36,7 @@ impl MixedCase for str {
 
 #[cfg(test)]
 mod tests {
-    use super::MixedCase;
+    use super::ToMixedCase;
 
     macro_rules! t {
         ($t:ident : $s1:expr => $s2:expr) => {
