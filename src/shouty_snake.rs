@@ -18,8 +18,8 @@ pub trait ShoutySnakeCase: ToOwned {
     fn to_shouty_snake_case(&self) -> Self::Owned;
 }
 
-/// Oh heck, ShoutySnekCase is an alias for ShoutySnakeCase. See ShoutySnakeCase for
-/// more documentation.
+/// Oh heck, ShoutySnekCase is an alias for ShoutySnakeCase. See ShoutySnakeCase
+/// for more documentation.
 pub trait ShoutySnekCase: ToOwned {
     /// CONVERT THIS TYPE TO SNEK CASE.
     #[allow(non_snake_case)]
