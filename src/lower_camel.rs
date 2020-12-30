@@ -1,25 +1,25 @@
 use crate::{capitalize, lowercase, transform};
 
-/// This trait defines a mixed case conversion.
+/// This trait defines a lower camel case conversion.
 ///
-/// In mixedCase, word boundaries are indicated by capital letters, excepting
-/// the first word.
+/// In lowerCamelCase, word boundaries are indicated by capital letters,
+/// excepting the first word.
 ///
 /// ## Example:
 ///
 /// ```rust
-/// use heck::ToMixedCase;
+/// use heck::ToLowerCamelCase;
 ///
 /// let sentence = "It is we who built these palaces and cities.";
-/// assert_eq!(sentence.to_mixed_case(), "itIsWeWhoBuiltThesePalacesAndCities");
+/// assert_eq!(sentence.to_lower_camel_case(), "itIsWeWhoBuiltThesePalacesAndCities");
 /// ```
-pub trait ToMixedCase: ToOwned {
-    /// Convert this type to mixed case.
-    fn to_mixed_case(&self) -> Self::Owned;
+pub trait ToLowerCamelCase: ToOwned {
+    /// Convert this type to lower camel case.
+    fn to_lower_camel_case(&self) -> Self::Owned;
 }
 
-impl ToMixedCase for str {
-    fn to_mixed_case(&self) -> String {
+impl ToLowerCamelCase for str {
+    fn to_lower_camel_case(&self) -> String {
         transform(
             self,
             |s, out| {
@@ -36,13 +36,13 @@ impl ToMixedCase for str {
 
 #[cfg(test)]
 mod tests {
-    use super::ToMixedCase;
+    use super::ToLowerCamelCase;
 
     macro_rules! t {
         ($t:ident : $s1:expr => $s2:expr) => {
             #[test]
             fn $t() {
-                assert_eq!($s1.to_mixed_case(), $s2)
+                assert_eq!($s1.to_lower_camel_case(), $s2)
             }
         };
     }

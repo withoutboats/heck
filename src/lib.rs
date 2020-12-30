@@ -40,21 +40,21 @@
 #![deny(missing_docs)]
 #![forbid(unsafe_code)]
 
-mod camel;
 mod kebab;
-mod mixed;
+mod lower_camel;
 mod shouty_kebab;
 mod shouty_snake;
 mod snake;
 mod title;
+mod upper_camel;
 
-pub use camel::ToCamelCase;
 pub use kebab::ToKebabCase;
-pub use mixed::ToMixedCase;
+pub use lower_camel::ToLowerCamelCase;
 pub use shouty_kebab::ToShoutyKebabCase;
 pub use shouty_snake::{ToShoutySnakeCase, ToShoutySnekCase};
 pub use snake::{ToSnakeCase, ToSnekCase};
 pub use title::ToTitleCase;
+pub use upper_camel::ToUpperCamelCase;
 
 use unicode_segmentation::UnicodeSegmentation;
 
