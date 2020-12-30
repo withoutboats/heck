@@ -24,6 +24,19 @@ impl ToUpperCamelCase for str {
     }
 }
 
+/// ToPascalCase is an alias for ToUpperCamelCase. See ToUpperCamelCase for more
+/// documentation.
+pub trait ToPascalCase: ToOwned {
+    /// Convert this type to upper camel case.
+    fn to_pascal_case(&self) -> Self::Owned;
+}
+
+impl<T: ?Sized + ToUpperCamelCase> ToPascalCase for T {
+    fn to_pascal_case(&self) -> Self::Owned {
+        self.to_upper_camel_case()
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::ToUpperCamelCase;

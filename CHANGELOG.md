@@ -6,3 +6,4 @@ Breaking changes:
   of beginning trait names with a verb (`ToOwned`, `AsRef`, …)
 * Rename `ToMixedCase` to `ToLowerCamelCase`
 * Rename `ToCamelCase` to `ToUpperCamelCase`
+* Add `ToPascalCase` as an alias to `ToUpperCamelCase`

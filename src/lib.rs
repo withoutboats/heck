@@ -54,7 +54,7 @@ pub use shouty_kebab::ToShoutyKebabCase;
 pub use shouty_snake::{ToShoutySnakeCase, ToShoutySnekCase};
 pub use snake::{ToSnakeCase, ToSnekCase};
 pub use title::ToTitleCase;
-pub use upper_camel::ToUpperCamelCase;
+pub use upper_camel::{ToPascalCase, ToUpperCamelCase};
 
 use unicode_segmentation::UnicodeSegmentation;
 
