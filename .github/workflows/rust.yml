@@ -12,16 +12,23 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    # Use MSRV for the build job
+    - uses: actions-rs/toolchain@v1
+      with:
+        toolchain: 1.32
+        default: true
+        profile: minimal
+    - name: Build
+      uses: actions-rs/cargo@v1
+      with:
+        command: build
+    # Use stable for other jobs
     - uses: actions-rs/toolchain@v1
       with:
         toolchain: stable
         default: true
         profile: minimal
         components: rustfmt, clippy
-    - name: Build
-      uses: actions-rs/cargo@v1
-      with:
-        command: build
     - name: Run tests
       uses: actions-rs/cargo@v1
       with:
