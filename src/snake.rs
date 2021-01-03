@@ -1,4 +1,5 @@
-use crate::{lowercase, transform};
+use crate::{lowercase, transform, ConvertCaseOpt, Case};
+use crate::convert_case::convert_case;
 
 /// This trait defines a snake case conversion.
 ///
@@ -30,9 +31,13 @@ impl<T: ?Sized + ToSnakeCase> ToSnekCase for T {
     }
 }
 
+pub fn to_snake_case(s: &str, number_starts_word: bool) -> String {
+    transform(s, number_starts_word, lowercase, |s| s.push('_'))
+}
+
 impl ToSnakeCase for str {
-    fn to_snake_case(&self) -> String {
-        transform(self, lowercase, |s| s.push('_'))
+    fn to_snake_case(&self) -> Self::Owned {
+        convert_case(&self, ConvertCaseOpt {case: Case::Snake, number_starts_word: false})
     }
 }
 

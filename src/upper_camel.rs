@@ -1,4 +1,5 @@
-use crate::{capitalize, transform};
+use crate::{capitalize, transform, ConvertCaseOpt, Case};
+use crate::convert_case::convert_case;
 
 /// This trait defines an upper camel case conversion.
 ///
@@ -18,9 +19,13 @@ pub trait ToUpperCamelCase: ToOwned {
     fn to_upper_camel_case(&self) -> Self::Owned;
 }
 
+pub fn to_upper_camel_case(s: &str, numbers_starts_word: bool) -> String {
+    transform(s, numbers_starts_word, capitalize, |_| {})
+}
+
 impl ToUpperCamelCase for str {
-    fn to_upper_camel_case(&self) -> String {
-        transform(self, capitalize, |_| {})
+    fn to_upper_camel_case(&self) -> Self::Owned {
+        convert_case(&self, ConvertCaseOpt {case: Case::UpperCamel, number_starts_word: false})
     }
 }
 

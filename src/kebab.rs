@@ -1,4 +1,5 @@
-use crate::{lowercase, transform};
+use crate::{lowercase, transform, ConvertCaseOpt, Case};
+use crate::convert_case::convert_case;
 
 /// This trait defines a kebab case conversion.
 ///
@@ -17,9 +18,13 @@ pub trait ToKebabCase: ToOwned {
     fn to_kebab_case(&self) -> Self::Owned;
 }
 
+pub fn to_kebab(s: &str, number_starts_word: bool) -> String {
+    transform(s, number_starts_word, lowercase, |s| s.push('-'))
+}
+
 impl ToKebabCase for str {
     fn to_kebab_case(&self) -> Self::Owned {
-        transform(self, lowercase, |s| s.push('-'))
+        convert_case(&self, ConvertCaseOpt {case: Case::Kebab, number_starts_word: false})
     }
 }
 

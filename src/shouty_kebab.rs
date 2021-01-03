@@ -1,4 +1,5 @@
-use crate::{transform, uppercase};
+use crate::{transform, uppercase, ConvertCaseOpt, Case};
+use crate::convert_case::convert_case;
 
 /// This trait defines a shouty kebab case conversion.
 ///
@@ -18,9 +19,13 @@ pub trait ToShoutyKebabCase: ToOwned {
     fn to_shouty_kebab_case(&self) -> Self::Owned;
 }
 
+pub fn to_shouty_kebab_case(s: &str, number_starts_word: bool) -> String {
+    transform(s, number_starts_word, uppercase, |s| s.push('-'))
+}
+
 impl ToShoutyKebabCase for str {
     fn to_shouty_kebab_case(&self) -> Self::Owned {
-        transform(self, uppercase, |s| s.push('-'))
+        convert_case(&self, ConvertCaseOpt {case: Case::ShoutyKebab, number_starts_word: false})
     }
 }
 
