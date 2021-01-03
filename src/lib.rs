@@ -40,6 +40,7 @@
 #![deny(missing_docs)]
 #![forbid(unsafe_code)]
 
+mod convert_case;
 mod kebab;
 mod lower_camel;
 mod shouty_kebab;
@@ -47,8 +48,8 @@ mod shouty_snake;
 mod snake;
 mod title;
 mod upper_camel;
-mod convert_case;
 
+pub use convert_case::{Case, ConvertCase, ConvertCaseOpt};
 pub use kebab::ToKebabCase;
 pub use lower_camel::ToLowerCamelCase;
 pub use shouty_kebab::ToShoutyKebabCase;
@@ -56,7 +57,6 @@ pub use shouty_snake::{ToShoutySnakeCase, ToShoutySnekCase};
 pub use snake::{ToSnakeCase, ToSnekCase};
 pub use title::ToTitleCase;
 pub use upper_camel::{ToPascalCase, ToUpperCamelCase};
-pub use convert_case::{ConvertCase, Case, ConvertCaseOpt};
 
 use unicode_segmentation::UnicodeSegmentation;
 
@@ -84,7 +84,7 @@ where
         /// The previous cased character in the current word is uppercase.
         Uppercase,
         /// The previous cased character in the current word is numeric
-        Numeric
+        Numeric,
     }
 
     let mut out = String::new();
@@ -124,10 +124,15 @@ where
                 // When number_starts_word is false: Word boundary after if next is underscore or current is
                 // not uppercase and next is uppercase
                 // When number_starts_word is true: word boundary after when mode changes from alpha to numeric or numeric to alpha
-                if next == '_' ||
-                    (next_mode == WordMode::Lowercase && next.is_uppercase()) ||
-                        (number_starts_word && next_mode == WordMode::Numeric && (next.is_uppercase() || next.is_lowercase())) ||
-                        (number_starts_word && next.is_numeric() && (next_mode == WordMode::Lowercase || next_mode == WordMode::Uppercase)) {
+                if next == '_'
+                    || (next_mode == WordMode::Lowercase && next.is_uppercase())
+                    || (number_starts_word
+                        && next_mode == WordMode::Numeric
+                        && (next.is_uppercase() || next.is_lowercase()))
+                    || (number_starts_word
+                        && next.is_numeric()
+                        && (next_mode == WordMode::Lowercase || next_mode == WordMode::Uppercase))
+                {
                     if !first_word {
                         boundary(&mut out);
                     }

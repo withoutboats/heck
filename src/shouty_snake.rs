@@ -1,5 +1,5 @@
-use crate::{transform, uppercase, ConvertCaseOpt, Case};
 use crate::convert_case::convert_case;
+use crate::{transform, uppercase, Case, ConvertCaseOpt};
 
 /// This trait defines a shouty snake case conversion.
 ///
@@ -39,7 +39,13 @@ pub fn to_shouty_snake_case(s: &str, numbers_starts_word: bool) -> String {
 
 impl ToShoutySnakeCase for str {
     fn to_shouty_snake_case(&self) -> Self::Owned {
-        convert_case(&self, ConvertCaseOpt {case: Case::ShoutySnake, number_starts_word: false})
+        convert_case(
+            &self,
+            ConvertCaseOpt {
+                case: Case::ShoutySnake,
+                number_starts_word: false,
+            },
+        )
     }
 }
 
