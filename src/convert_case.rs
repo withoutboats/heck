@@ -72,91 +72,30 @@ impl ConvertCase for str {
 mod tests {
     use crate::{Case, ConvertCase, ConvertCaseOpt};
 
-    #[test]
-    fn number_starts_word_kebab_simple() {
-        assert_eq!(
-            "aes128".convert_case(ConvertCaseOpt {
-                case: Case::Kebab,
-                number_starts_word: true
-            }),
-            "aes-128"
-        );
+    macro_rules! t {
+        ($t:ident: $s1:expr, $c:ident,  $n:ident  => $s2:expr) => {
+            #[test]
+            fn $t() {
+                assert_eq!(
+                    $s1.convert_case(ConvertCaseOpt {
+                        case: Case::$c,
+                        number_starts_word: $n
+                    }),
+                    $s2
+                )
+            }
+        };
     }
 
-    #[test]
-    fn number_starts_word_kebab_complex() {
-        assert_eq!(
-            "aes128Key".convert_case(ConvertCaseOpt {
-                case: Case::Kebab,
-                number_starts_word: true
-            }),
-            "aes-128-key"
-        );
-    }
-
-    #[test]
-    fn number_starts_word_kebab_complex_underscore() {
-        assert_eq!(
-            "aes128 Key".convert_case(ConvertCaseOpt {
-                case: Case::Kebab,
-                number_starts_word: true
-            }),
-            "aes-128-key"
-        );
-    }
-
-    #[test]
-    fn number_starts_word_false_kebab_complex_underscore() {
-        assert_eq!(
-            "aes128 Key".convert_case(ConvertCaseOpt {
-                case: Case::Kebab,
-                number_starts_word: false
-            }),
-            "aes128-key"
-        );
-    }
-
-    #[test]
-    fn number_starts_word_true_title_case() {
-        assert_eq!(
-            "AES128BitKey".convert_case(ConvertCaseOpt {
-                case: Case::Title,
-                number_starts_word: true
-            }),
-            "Aes 128 Bit Key"
-        );
-    }
-
-    #[test]
-    fn number_starts_word_true_snake_case() {
-        assert_eq!(
-            "99BOTTLES".convert_case(ConvertCaseOpt {
-                case: Case::Snake,
-                number_starts_word: true
-            }),
-            "99_bottles"
-        );
-    }
-
-    #[test]
-    fn number_starts_word_true_snake_case_2() {
-        assert_eq!(
-            "abc123DEF456".convert_case(ConvertCaseOpt {
-                case: Case::Snake,
-                number_starts_word: true
-            }),
-            "abc_123_def_456"
-        );
-    }
-
-    #[test]
-    fn number_starts_word_true_snake_case_3() {
-        assert_eq!(
-            "ABC123dEEf456FOO".convert_case(ConvertCaseOpt {
-                case: Case::Snake,
-                number_starts_word: true
-            }),
-            "abc_123_d_e_ef_456_foo"
-        );
-    }
+    t!(test1: "AES 128 bit key", LowerCamel, false => "aes128BitKey");
+    t!(test2: "AES 128 bit key", LowerCamel, true => "aes128BitKey");
+    t!(test3: "AES 128 bit key", Kebab, true => "aes-128-bit-key");
+    t!(test4: "99BOTTLES", Snake, false => "99bottles");
+    t!(test5: "99BOTTLES", Snake, true => "99_bottles");
+    t!(test6: "ABC123dEEf456FOO", Snake, false => "abc123d_e_ef456_foo");
+    t!(test7: "ABC123dEEf456FOO", Snake, true => "abc_123_d_e_ef_456_foo");
+    t!(test8: "XMLHttpRequest404", Title, false => "Xml Http Request404");
+    t!(test9: "XMLHttpRequest404", Title, true => "Xml Http Request 404");
+    t!(test10: "this-contains_ ALLKinds OfWord_Boundaries_1Also", Kebab, false => "this-contains-all-kinds-of-word-boundaries-1also");
+    t!(test11: "this-contains_ ALLKinds OfWord_Boundaries_1Also", Kebab, true => "this-contains-all-kinds-of-word-boundaries-1-also");
 }
