@@ -114,7 +114,7 @@ where
                 // Word boundary after if next is underscore or current is
                 // not uppercase and next is uppercase
                 if next == '_' || (next_mode == WordMode::Lowercase && next.is_uppercase()) {
-                    if !first_word {
+                    if !first_word && !continous_script(&word[init..]) {
                         boundary(&mut out);
                     }
                     with_word(&word[init..next_i], &mut out);
@@ -126,7 +126,9 @@ where
                 // is lowercase, word boundary before
                 } else if mode == WordMode::Uppercase && c.is_uppercase() && next.is_lowercase() {
                     if !first_word {
-                        boundary(&mut out);
+                        if !continous_script(&word[init..]) {
+                            boundary(&mut out);
+                        }
                     } else {
                         first_word = false;
                     }
@@ -141,7 +143,9 @@ where
             } else {
                 // Collect trailing characters as a word
                 if !first_word {
-                    boundary(&mut out);
+                    if !continous_script(&word[init..]) {
+                        boundary(&mut out);
+                    }
                 } else {
                     first_word = false;
                 }
@@ -152,6 +156,52 @@ where
     }
 
     out
+}
+
+/// Check if the first character is part of a continous script
+/// and that it does does not have the concept of casing.
+///
+/// Based on cjk crate, cjk-regex (js) and wikipedia.
+fn continous_script(word: &str) -> bool {
+    // Ignore languages that does not have word boundary.
+    let first_char = word.chars().next();
+    #[allow(clippy::match_like_matches_macro)]
+    match first_char {
+        // Bopomofo
+        Some('\u{3100}'..='\u{312F}') => true,
+        // CJK Unified Ideographs
+        Some('\u{4E00}'..='\u{9FFF}') => true,
+        // CJK Unified Ideographs Extension A
+        Some('\u{3400}'..='\u{4DB5}') => true,
+        // CJK Unified Ideographs Extension B
+        Some('\u{20000}'..='\u{2A6DF}') => true,
+        // CJK Unified Ideographs Extension C
+        Some('\u{2A700}'..='\u{2B73F}') => true,
+        // CJK Unified Ideographs Extension D
+        Some('\u{2B740}'..='\u{2B81F}') => true,
+        // CJK Unified Ideographs Extension E
+        Some('\u{2B820}'..='\u{2CEAF}') => true,
+        // CJK Unified Ideographs Extension F
+        Some('\u{2CEB0}'..='\u{2EBEF}') => true,
+        // CJK Unified Ideographs Extension G
+        Some('\u{30000}'..='\u{3134F}') => true,
+        // CJK Symbols and Punctuation
+        Some('\u{3000}'..='\u{303F}') => true,
+        // CJK Compatibility Ideographs
+        Some('\u{F900}'..='\u{FAFF}') => true,
+        // CJK Compatibility Ideographs Supplement
+        Some('\u{2F800}'..='\u{2FA1F}') => true,
+        // Hiragana
+        Some('\u{3040}'..='\u{309F}') => true,
+        // Katakana
+        Some('\u{30A0}'..='\u{30FF}') => true,
+        // Thai
+        Some('\u{0E00}'..='\u{0E7F}') => true,
+        // Latin and others
+        // Kanbun is used for ordering, so there should be separator
+        // Korean uses spaces in modern days
+        _ => false,
+    }
 }
 
 fn lowercase(s: &str, out: &mut String) {
