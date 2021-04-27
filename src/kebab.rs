@@ -46,4 +46,13 @@ mod tests {
     t!(test8: "this-contains_ ALLKinds OfWord_Boundaries" => "this-contains-all-kinds-of-word-boundaries");
     t!(test9: "XΣXΣ baﬄe" => "xσxς-baﬄe");
     t!(test10: "XMLHttpRequest" => "xml-http-request");
+    t!(test11: "ファイルを読み込み" => "ファイルを読み込み");
+    t!(test12: "お前はもう死んでいる！何？" => "お前はもう死んでいる何");
+    t!(test13: "石室诗士施氏，嗜狮，誓食十狮。" => "石室诗士施氏嗜狮誓食十狮");
+    t!(test14: "石室詩士施氏，嗜獅，誓食十獅。" => "石室詩士施氏嗜獅誓食十獅");
+    t!(test15: "ㄕˊㄕˋㄕㄕˋㄕㄕˋ，ㄕˋㄕ，ㄕˋㄕˊㄕˊㄕ。" => "ㄕˊㄕˋㄕㄕˋㄕㄕˋㄕˋㄕㄕˋㄕˊㄕˊㄕ");
+    t!(test16: "shí shì shī shì shī shì ， shì shī ， shì shí shí shī 。" => "shí-shì-shī-shì-shī-shì-shì-shī-shì-shí-shí-shī");
+    t!(test17: "sek6 sat1 si1 si6 si1 si6 ，si3 si1 ，sai6 sik6 sap6 si1 。" => "sek6-sat1-si1-si6-si1-si6-si3-si1-sai6-sik6-sap6-si1");
+    t!(test18: "唱K" => "唱-k"); // this is incorrect but it doesn't matter
+    t!(test19: "YouTube" => "you-tube"); // this is incorrect but it doesn't matter
 }
