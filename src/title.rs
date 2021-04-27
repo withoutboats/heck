@@ -1,4 +1,5 @@
-use crate::{capitalize, transform};
+use crate::convert_case::convert_case;
+use crate::{capitalize, transform, Case, ConvertCaseOpt};
 
 /// This trait defines a title case conversion.
 ///
@@ -18,9 +19,19 @@ pub trait ToTitleCase: ToOwned {
     fn to_title_case(&self) -> Self::Owned;
 }
 
+pub fn to_title_case(s: &str, numbers_starts_word: bool) -> String {
+    transform(s, numbers_starts_word, capitalize, |s| s.push(' '))
+}
+
 impl ToTitleCase for str {
-    fn to_title_case(&self) -> String {
-        transform(self, capitalize, |s| s.push(' '))
+    fn to_title_case(&self) -> Self::Owned {
+        convert_case(
+            &self,
+            ConvertCaseOpt {
+                case: Case::Title,
+                number_starts_word: false,
+            },
+        )
     }
 }
 

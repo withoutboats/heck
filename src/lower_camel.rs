@@ -1,4 +1,5 @@
-use crate::{capitalize, lowercase, transform};
+use crate::convert_case::convert_case;
+use crate::{capitalize, lowercase, transform, Case, ConvertCaseOpt};
 
 /// This trait defines a lower camel case conversion.
 ///
@@ -18,18 +19,29 @@ pub trait ToLowerCamelCase: ToOwned {
     fn to_lower_camel_case(&self) -> Self::Owned;
 }
 
+pub fn to_lower_camel_case(s: &str, number_starts_word: bool) -> String {
+    transform(
+        s,
+        number_starts_word,
+        |s, out| {
+            if out.is_empty() {
+                lowercase(s, out);
+            } else {
+                capitalize(s, out)
+            }
+        },
+        |_| {},
+    )
+}
+
 impl ToLowerCamelCase for str {
-    fn to_lower_camel_case(&self) -> String {
-        transform(
-            self,
-            |s, out| {
-                if out.is_empty() {
-                    lowercase(s, out);
-                } else {
-                    capitalize(s, out)
-                }
+    fn to_lower_camel_case(&self) -> Self::Owned {
+        convert_case(
+            &self,
+            ConvertCaseOpt {
+                case: Case::LowerCamel,
+                number_starts_word: false,
             },
-            |_| {},
         )
     }
 }
