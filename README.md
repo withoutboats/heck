@@ -1,6 +1,6 @@
 # **heck** is a case conversion library
 
-!["I specifically requested the opposite of this."](https://github.com/withoutboats/heck/blob/master/no_step_on_snek.png)
+!["I specifically requested the opposite of this."](./no_step_on_snek.png)
 
 This library exists to provide case conversion between common cases like
 CamelCase and snake_case. It is intended to be unicode aware, internally
