@@ -1,3 +1,5 @@
+use std::fmt;
+
 use crate::{lowercase, transform};
 
 /// This trait defines a snake case conversion.
@@ -32,7 +34,25 @@ impl<T: ?Sized + ToSnakeCase> ToSnekCase for T {
 
 impl ToSnakeCase for str {
     fn to_snake_case(&self) -> String {
-        transform(self, lowercase, |s| s.push('_'))
+        AsSnakeCase(self).to_string()
+    }
+}
+
+/// This wrapper performs a snake case conversion in [`fmt::Display`].
+///
+/// ## Example:
+///
+/// ```
+/// use heck::AsSnakeCase;
+///
+/// let sentence = "We carry a new world here, in our hearts.";
+/// assert_eq!(format!("{}", AsSnakeCase(sentence)), "we_carry_a_new_world_here_in_our_hearts");
+/// ```
+pub struct AsSnakeCase<T: AsRef<str>>(pub T);
+
+impl<T: AsRef<str>> fmt::Display for AsSnakeCase<T> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        transform(self.0.as_ref(), lowercase, |f| write!(f, "_"), f)
     }
 }
 

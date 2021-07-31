@@ -1,3 +1,5 @@
+use std::fmt;
+
 use crate::{capitalize, lowercase, transform};
 
 /// This trait defines a lower camel case conversion.
@@ -20,16 +22,37 @@ pub trait ToLowerCamelCase: ToOwned {
 
 impl ToLowerCamelCase for str {
     fn to_lower_camel_case(&self) -> String {
+        AsLowerCamelCase(self).to_string()
+    }
+}
+
+/// This wrapper performs a lower camel case conversion in [`fmt::Display`].
+///
+/// ## Example:
+///
+/// ```
+/// use heck::AsLowerCamelCase;
+///
+/// let sentence = "It is we who built these palaces and cities.";
+/// assert_eq!(format!("{}", AsLowerCamelCase(sentence)), "itIsWeWhoBuiltThesePalacesAndCities");
+/// ```
+pub struct AsLowerCamelCase<T: AsRef<str>>(pub T);
+
+impl<T: AsRef<str>> fmt::Display for AsLowerCamelCase<T> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        let mut first = true;
         transform(
-            self,
-            |s, out| {
-                if out.is_empty() {
-                    lowercase(s, out);
+            self.0.as_ref(),
+            |s, f| {
+                if first {
+                    first = false;
+                    lowercase(s, f)
                 } else {
-                    capitalize(s, out)
+                    capitalize(s, f)
                 }
             },
-            |_| {},
+            |_| Ok(()),
+            f,
         )
     }
 }

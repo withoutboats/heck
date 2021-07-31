@@ -1,3 +1,5 @@
+use std::fmt;
+
 use crate::{capitalize, transform};
 
 /// This trait defines an upper camel case conversion.
@@ -20,7 +22,7 @@ pub trait ToUpperCamelCase: ToOwned {
 
 impl ToUpperCamelCase for str {
     fn to_upper_camel_case(&self) -> String {
-        transform(self, capitalize, |_| {})
+        AsUpperCamelCase(self).to_string()
     }
 }
 
@@ -34,6 +36,24 @@ pub trait ToPascalCase: ToOwned {
 impl<T: ?Sized + ToUpperCamelCase> ToPascalCase for T {
     fn to_pascal_case(&self) -> Self::Owned {
         self.to_upper_camel_case()
+    }
+}
+
+/// This wrapper performs a upper camel case conversion in [`fmt::Display`].
+///
+/// ## Example:
+///
+/// ```
+/// use heck::AsUpperCamelCase;
+///
+/// let sentence = "We are not in the least afraid of ruins.";
+/// assert_eq!(format!("{}", AsUpperCamelCase(sentence)), "WeAreNotInTheLeastAfraidOfRuins");
+/// ```
+pub struct AsUpperCamelCase<T: AsRef<str>>(pub T);
+
+impl<T: AsRef<str>> fmt::Display for AsUpperCamelCase<T> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        transform(self.0.as_ref(), capitalize, |_| Ok(()), f)
     }
 }
 
