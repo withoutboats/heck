@@ -1,3 +1,5 @@
+use std::fmt;
+
 use crate::{transform, uppercase};
 
 /// This trait defines a shouty kebab case conversion.
@@ -20,7 +22,25 @@ pub trait ToShoutyKebabCase: ToOwned {
 
 impl ToShoutyKebabCase for str {
     fn to_shouty_kebab_case(&self) -> Self::Owned {
-        transform(self, uppercase, |s| s.push('-'))
+        AsShoutyKebabCase(self).to_string()
+    }
+}
+
+/// This wrapper performs a kebab case conversion in [`fmt::Display`].
+///
+/// ## Example:
+///
+/// ```
+/// use heck::AsShoutyKebabCase;
+///
+/// let sentence = "We are going to inherit the earth.";
+/// assert_eq!(format!("{}", AsShoutyKebabCase(sentence)), "WE-ARE-GOING-TO-INHERIT-THE-EARTH");
+/// ```
+pub struct AsShoutyKebabCase<T: AsRef<str>>(pub T);
+
+impl<T: AsRef<str>> fmt::Display for AsShoutyKebabCase<T> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        transform(self.0.as_ref(), uppercase, |f| write!(f, "-"), f)
     }
 }
 

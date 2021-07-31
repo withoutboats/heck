@@ -1,3 +1,5 @@
+use std::fmt;
+
 use crate::{transform, uppercase};
 
 /// This trait defines a shouty snake case conversion.
@@ -34,7 +36,25 @@ impl<T: ?Sized + ToShoutySnakeCase> ToShoutySnekCase for T {
 
 impl ToShoutySnakeCase for str {
     fn to_shouty_snake_case(&self) -> Self::Owned {
-        transform(self, uppercase, |s| s.push('_'))
+        AsShoutySnakeCase(self).to_string()
+    }
+}
+
+/// This wrapper performs a shouty snake  case conversion in [`fmt::Display`].
+///
+/// ## Example:
+///
+/// ```
+/// use heck::AsShoutySnakeCase;
+///
+/// let sentence = "That world is growing in this minute.";
+/// assert_eq!(format!("{}", AsShoutySnakeCase(sentence)), "THAT_WORLD_IS_GROWING_IN_THIS_MINUTE");
+/// ```
+pub struct AsShoutySnakeCase<T: AsRef<str>>(pub T);
+
+impl<T: AsRef<str>> fmt::Display for AsShoutySnakeCase<T> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        transform(self.0.as_ref(), uppercase, |f| write!(f, "_"), f)
     }
 }
 
