@@ -77,6 +77,7 @@ mod tests {
     t!(test6: "SHOUTY_SNAKE_CASE" => "shouty_snake_case");
     t!(test7: "snake_case" => "snake_case");
     t!(test8: "this-contains_ ALLKinds OfWord_Boundaries" => "this_contains_all_kinds_of_word_boundaries");
+    #[cfg(feature = "unicode")]
     t!(test9: "XΣXΣ baﬄe" => "xσxς_baﬄe");
     t!(test10: "XMLHttpRequest" => "xml_http_request");
     t!(test11: "FIELD_NAME11" => "field_name11");
