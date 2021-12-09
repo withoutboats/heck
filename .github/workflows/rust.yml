@@ -18,9 +18,14 @@ jobs:
         toolchain: 1.32
         default: true
         profile: minimal
-    - name: Build
+    - name: Build default
       uses: actions-rs/cargo@v1
       with:
+        command: build
+    - name: Build with unicode segmentation on
+      uses: actions-rs/cargo@v1
+      with:
+        args: --features unicode
         command: build
     # Use stable for other jobs
     - uses: actions-rs/toolchain@v1
