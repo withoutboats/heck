@@ -1,7 +1,9 @@
-# 0.4.0 (unreleased)
+# 0.4.0
 
 Breaking changes:
 
+* Make unicode support optional (off by default). Enable the `unicode` crate
+  feature if you need unicode support.
 * Rename all traits from `SomeCase` to `ToSomeCase`, matching `std`s convention
   of beginning trait names with a verb (`ToOwned`, `AsRef`, …)
 * Rename `ToMixedCase` to `ToLowerCamelCase`
