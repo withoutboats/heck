@@ -1,7 +1,7 @@
 //! **heck** is a case conversion library.
 //!
 //! This library exists to provide case conversion between common cases like
-//! CamelCase and snake_case. It is intended to be unicode aware, internally,
+//! CamelCase and snake_case. It is intended to be unicode aware, internally
 //! consistent, and reasonably well performing.
 //!
 //! ## Definition of a word boundary
