@@ -37,6 +37,7 @@
 //! 5. SHOUTY_SNAKE_CASE
 //! 6. Title Case
 //! 7. SHOUTY-KEBAB-CASE
+//! 8. Train-Case
 #![deny(missing_docs)]
 #![forbid(unsafe_code)]
 
@@ -46,6 +47,7 @@ mod shouty_kebab;
 mod shouty_snake;
 mod snake;
 mod title;
+mod train;
 mod upper_camel;
 
 pub use kebab::{AsKebabCase, ToKebabCase};
@@ -56,6 +58,7 @@ pub use shouty_snake::{
 };
 pub use snake::{AsSnakeCase, AsSnakeCase as AsSnekCase, ToSnakeCase, ToSnekCase};
 pub use title::{AsTitleCase, ToTitleCase};
+pub use train::{AsTrainCase, ToTrainCase};
 pub use upper_camel::{
     AsUpperCamelCase, AsUpperCamelCase as AsPascalCase, ToPascalCase, ToUpperCamelCase,
 };
