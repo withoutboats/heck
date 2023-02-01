@@ -1,7 +1,7 @@
 [package]
 authors = ["Without Boats <woboats@gmail.com>"]
 name = "heck"
-version = "0.4.0"
+version = "0.4.1"
 edition = "2018"
 license = "MIT OR Apache-2.0"
 description = "heck is a case conversion library."
