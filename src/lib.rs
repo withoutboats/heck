@@ -38,6 +38,8 @@
 //! 6. Title Case
 //! 7. SHOUTY-KEBAB-CASE
 //! 8. Train-Case
+//! 9. dot.case
+//! 10. SHOUTY.DOT.CASE
 #![deny(missing_docs)]
 #![forbid(unsafe_code)]
 
