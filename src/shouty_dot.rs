@@ -4,7 +4,7 @@ use crate::{transform, uppercase};
 
 /// This trait defines a shouty dot case conversion.
 ///
-/// In SHOUTY_dot_CASE, word boundaries are indicated by underscores and all
+/// In SHOUTY.DOT.CASE, word boundaries are indicated by dots and all
 /// words are in uppercase.
 ///
 /// ## Example:
@@ -26,7 +26,7 @@ impl ToShoutyDotCase for str {
     }
 }
 
-/// This wrapper performs a shouty dot  case conversion in [`fmt::Display`].
+/// This wrapper performs a shouty dot case conversion in [`fmt::Display`].
 ///
 /// ## Example:
 ///

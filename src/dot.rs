@@ -4,7 +4,7 @@ use crate::{lowercase, transform};
 
 /// This trait defines a dot case conversion.
 ///
-/// In dot_case, word boundaries are indicated by underscores.
+/// In dot.case, word boundaries are indicated by dots.
 ///
 /// ## Example:
 ///
