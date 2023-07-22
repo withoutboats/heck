@@ -68,4 +68,7 @@ mod tests {
     #[cfg(feature = "unicode")]
     t!(test9: "XΣXΣ baﬄe" => "Xσxς Baﬄe");
     t!(test10: "XMLHttpRequest" => "Xml Http Request");
+    t!(test11: "dot.case" => "Dot Case");
+    t!(test12: "SHOUTY.DOT.CASE" => "Shouty Dot Case");
+    t!(test13: "mixed.up. dot.case with some .spaces" => "Mixed Up Dot Case With Some Spaces");
 }

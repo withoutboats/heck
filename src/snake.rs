@@ -83,7 +83,6 @@ mod tests {
     t!(test11: "FIELD_NAME11" => "field_name11");
     t!(test12: "99BOTTLES" => "99bottles");
     t!(test13: "FieldNamE11" => "field_nam_e11");
-
     t!(test14: "abc123def456" => "abc123def456");
     t!(test16: "abc123DEF456" => "abc123_def456");
     t!(test17: "abc123Def456" => "abc123_def456");
@@ -95,4 +94,7 @@ mod tests {
     t!(test23: "ABC123dEEf456FOO" => "abc123d_e_ef456_foo");
     t!(test24: "abcDEF" => "abc_def");
     t!(test25: "ABcDE" => "a_bc_de");
+    t!(test26: "dot.case" => "dot_case");
+    t!(test27: "SHOUTY.DOT.CASE" => "shouty_dot_case");
+    t!(test28: "mixed.up. dot.case with some .spaces" => "mixed_up_dot_case_with_some_spaces");
 }

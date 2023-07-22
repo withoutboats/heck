@@ -82,4 +82,7 @@ mod tests {
     t!(test23: "ABC123dEEf456FOO" => "Abc123d-E-Ef456-Foo");
     t!(test24: "abcDEF" => "Abc-Def");
     t!(test25: "ABcDE" => "A-Bc-De");
+    t!(test26: "dot.case" => "Dot-Case");
+    t!(test27: "SHOUTY.DOT.CASE" => "Shouty-Dot-Case");
+    t!(test28: "mixed.up. dot.case with some .spaces" => "Mixed-Up-Dot-Case-With-Some-Spaces");
 }

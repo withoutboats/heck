@@ -69,4 +69,7 @@ mod tests {
     t!(test9: "XΣXΣ baﬄe" => "XΣXΣ-BAFFLE");
     t!(test10: "XMLHttpRequest" => "XML-HTTP-REQUEST");
     t!(test11: "SHOUTY-KEBAB-CASE" => "SHOUTY-KEBAB-CASE");
+    t!(test12: "dot.case" => "DOT-CASE");
+    t!(test13: "SHOUTY.DOT.CASE" => "SHOUTY-DOT-CASE");
+    t!(test14: "mixed.up. dot.case with some .spaces" => "MIXED-UP-DOT-CASE-WITH-SOME-SPACES");
 }
