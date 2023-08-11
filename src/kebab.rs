@@ -68,4 +68,5 @@ mod tests {
     t!(test8: "this-contains_ ALLKinds OfWord_Boundaries" => "this-contains-all-kinds-of-word-boundaries");
     t!(test9: "XΣXΣ baﬄe" => "xσxς-baﬄe");
     t!(test10: "XMLHttpRequest" => "xml-http-request");
+    t!(test11: "لِنَذْهَبْ إِلَى السِّيْنَمَا" => "لِنَذْهَبْ-إِلَى-السِّيْنَمَا");
 }
