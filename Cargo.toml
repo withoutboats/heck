@@ -9,5 +9,6 @@ homepage = "https://github.com/withoutboats/heck"
 repository = "https://github.com/withoutboats/heck"
 documentation = "https://docs.rs/heck"
 keywords = ["string", "case", "camel", "snake", "unicode"]
+categories = ["no-std"]
 readme = "README.md"
 include = ["src/**/*", "LICENSE-*", "README.md", "CHANGELOG.md"]

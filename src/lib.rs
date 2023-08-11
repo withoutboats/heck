@@ -40,6 +40,9 @@
 //! 8. Train-Case
 #![deny(missing_docs)]
 #![forbid(unsafe_code)]
+#![no_std]
+
+extern crate alloc;
 
 mod kebab;
 mod lower_camel;
@@ -63,7 +66,7 @@ pub use upper_camel::{
     AsUpperCamelCase, AsUpperCamelCase as AsPascalCase, ToPascalCase, ToUpperCamelCase,
 };
 
-use std::fmt;
+use core::fmt;
 
 fn transform<F, G>(
     s: &str,

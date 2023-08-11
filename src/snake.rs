@@ -1,4 +1,8 @@
-use std::fmt;
+use alloc::{
+    borrow::ToOwned,
+    fmt,
+    string::{String, ToString},
+};
 
 use crate::{lowercase, transform};
 
