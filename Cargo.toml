@@ -11,6 +11,3 @@ documentation = "https://docs.rs/heck"
 keywords = ["string", "case", "camel", "snake", "unicode"]
 readme = "README.md"
 include = ["src/**/*", "LICENSE-*", "README.md", "CHANGELOG.md"]
-
-[dependencies]
-unicode-segmentation = "1.2.0"

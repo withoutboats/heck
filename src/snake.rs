@@ -82,7 +82,6 @@ mod tests {
     t!(test11: "FIELD_NAME11" => "field_name11");
     t!(test12: "99BOTTLES" => "99bottles");
     t!(test13: "FieldNamE11" => "field_nam_e11");
-
     t!(test14: "abc123def456" => "abc123def456");
     t!(test16: "abc123DEF456" => "abc123_def456");
     t!(test17: "abc123Def456" => "abc123_def456");
