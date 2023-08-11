@@ -15,7 +15,7 @@ jobs:
     # Use MSRV for the build job
     - uses: actions-rs/toolchain@v1
       with:
-        toolchain: 1.32
+        toolchain: 1.56
         default: true
         profile: minimal
     - name: Build

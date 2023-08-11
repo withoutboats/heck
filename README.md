@@ -52,7 +52,7 @@ Bug reports & fixes always welcome. :-)
 
 ## MSRV
 
-The minimum supported Rust version for this crate is 1.32.0. This may change in
+The minimum supported Rust version for this crate is 1.56.0. This may change in
 minor or patch releases, but we probably won't ever require a very recent
 version. If you would like to have a stronger guarantee than that, please open
 an issue.
