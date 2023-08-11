@@ -31,7 +31,7 @@ impl ToUpperCamelCase for str {
     }
 }
 
-/// ToPascalCase is an alias for [`ToUpperCamelCase`]. See ToUpperCamelCase for more
+/// `ToPascalCase` is an alias for [`ToUpperCamelCase`]. See ToUpperCamelCase for more
 /// documentation.
 pub trait ToPascalCase: ToOwned {
     /// Convert this type to upper camel case.

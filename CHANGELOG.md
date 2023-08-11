@@ -1,4 +1,4 @@
-# 0.5.0
+# unreleased
 
 - Add `no_std` support.
 - Removed non-additive `unicode` feature. The library now uses `char::is_alphanumeric`

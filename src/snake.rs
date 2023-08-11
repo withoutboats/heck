@@ -23,7 +23,7 @@ pub trait ToSnakeCase: ToOwned {
     fn to_snake_case(&self) -> Self::Owned;
 }
 
-/// Oh heck, SnekCase is an alias for [`ToSnakeCase`]. See ToSnakeCase for
+/// Oh heck, `SnekCase` is an alias for [`ToSnakeCase`]. See ToSnakeCase for
 /// more documentation.
 pub trait ToSnekCase: ToOwned {
     /// Convert this type to snek case.
