@@ -78,7 +78,6 @@ mod tests {
     t!(test6: "SHOUTY_SNAKE_CASE" => "shoutySnakeCase");
     t!(test7: "snake_case" => "snakeCase");
     t!(test8: "this-contains_ ALLKinds OfWord_Boundaries" => "thisContainsAllKindsOfWordBoundaries");
-    #[cfg(feature = "unicode")]
     t!(test9: "XΣXΣ baﬄe" => "xσxςBaﬄe");
     t!(test10: "XMLHttpRequest" => "xmlHttpRequest");
     // TODO unicode tests

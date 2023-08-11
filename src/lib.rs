@@ -65,15 +65,7 @@ pub use upper_camel::{
 
 use std::fmt;
 
-#[cfg(feature = "unicode")]
-fn get_iterator(s: &str) -> unicode_segmentation::UnicodeWords {
-    use unicode_segmentation::UnicodeSegmentation;
-    s.unicode_words()
-}
-#[cfg(not(feature = "unicode"))]
-fn get_iterator(s: &str) -> impl Iterator<Item = &str> {
-    s.split(|letter: char| !letter.is_ascii_alphanumeric())
-}
+use unicode_segmentation::UnicodeSegmentation;
 
 fn transform<F, G>(
     s: &str,
@@ -107,7 +99,7 @@ where
 
     let mut first_word = true;
 
-    for word in get_iterator(s) {
+    for word in s.unicode_words() {
         let mut char_indices = word.char_indices().peekable();
         let mut init = 0;
         let mut mode = WordMode::Boundary;
