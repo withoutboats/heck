@@ -1,4 +1,6 @@
-use std::fmt;
+use core::fmt;
+
+use alloc::{borrow::ToOwned, string::ToString};
 
 use crate::{lowercase, transform};
 
@@ -64,10 +66,10 @@ mod tests {
     t!(test6: "SHOUTY_SNAKE_CASE" => "shouty-snake-case");
     t!(test7: "snake_case" => "snake-case");
     t!(test8: "this-contains_ ALLKinds OfWord_Boundaries" => "this-contains-all-kinds-of-word-boundaries");
-    #[cfg(feature = "unicode")]
     t!(test9: "XΣXΣ baﬄe" => "xσxς-baﬄe");
     t!(test10: "XMLHttpRequest" => "xml-http-request");
-    t!(test11: "dot.case" => "dot-case");
-    t!(test12: "SHOUTY.DOT.CASE" => "shouty-dot-case");
-    t!(test13: "mixed.up. dot.case with some .spaces" => "mixed-up-dot-case-with-some-spaces");
+    t!(test11: "لِنَذْهَبْ إِلَى السِّيْنَمَا" => "لِنَذْهَبْ-إِلَى-السِّيْنَمَا");
+    t!(test12: "dot.case" => "dot-case");
+    t!(test13: "SHOUTY.DOT.CASE" => "shouty-dot-case");
+    t!(test14: "mixed.up. dot.case with some .spaces" => "mixed-up-dot-case-with-some-spaces");
 }

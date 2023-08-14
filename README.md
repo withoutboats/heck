@@ -8,15 +8,16 @@ consistent, and reasonably well performing.
 
 ## Definition of a word boundary
 
-Word boundaries are defined as the "unicode words" defined in the
-`unicode_segmentation` library, as well as within those words in this manner:
+Word boundaries are defined by non-alphanumeric characters, as well as
+within those words in this manner:
 
-1. All underscore characters are considered word boundaries.
-2. If an uppercase character is followed by lowercase letters, a word boundary
-is considered to be just prior to that uppercase character.
-3. If multiple uppercase characters are consecutive, they are considered to be
-within a single word, except that the last will be part of the next word if it
-is followed by lowercase characters (see rule 2).
+1. If an uppercase character is followed by lowercase letters, a word
+boundary is considered to be just prior to that uppercase character.
+2. If multiple uppercase characters are consecutive, they are considered to
+be within a single word, except that the last will be part of the next word
+if it is followed by lowercase characters (see rule 1).
+3. Non-alphabetic chraracters inherit the case of the preceding character
+for use in rules 1 and 2.
 
 That is, "HelloWorld" is segmented `Hello|World` whereas "XMLHttpRequest" is
 segmented `XML|Http|Request`.
@@ -53,7 +54,7 @@ Bug reports & fixes always welcome. :-)
 
 ## MSRV
 
-The minimum supported Rust version for this crate is 1.32.0. This may change in
+The minimum supported Rust version for this crate is 1.56.0. This may change in
 minor or patch releases, but we probably won't ever require a very recent
 version. If you would like to have a stronger guarantee than that, please open
 an issue.
