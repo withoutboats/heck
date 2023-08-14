@@ -52,6 +52,7 @@ mod snake;
 mod title;
 mod train;
 mod upper_camel;
+mod human;
 
 pub use kebab::{AsKebabCase, ToKebabCase};
 pub use lower_camel::{AsLowerCamelCase, ToLowerCamelCase};
@@ -65,6 +66,7 @@ pub use train::{AsTrainCase, ToTrainCase};
 pub use upper_camel::{
     AsUpperCamelCase, AsUpperCamelCase as AsPascalCase, ToPascalCase, ToUpperCamelCase,
 };
+pub use human::{ToHumanCase, AsHumanCase};
 
 use core::fmt;
 
