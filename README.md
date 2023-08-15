@@ -40,16 +40,6 @@ indicators are dropped, except insofar as CamelCase capitalizes the first word.
 7. SHOUTY-KEBAB-CASE
 8. Train-Case
 
-## Contributing
-
-PRs of additional well-established cases welcome.
-
-This library is a little bit opinionated (dropping punctuation, for example).
-If that doesn't fit your use case, I hope there is another crate that does. I
-would prefer **not** to receive PRs to make this behavior more configurable.
-
-Bug reports & fixes always welcome. :-)
-
 ## MSRV
 
 The minimum supported Rust version for this crate is 1.56.0. This may change in
