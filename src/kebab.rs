@@ -69,7 +69,11 @@ mod tests {
     t!(test9: "XΣXΣ baﬄe" => "xσxς-baﬄe");
     t!(test10: "XMLHttpRequest" => "xml-http-request");
     t!(test11: "لِنَذْهَبْ إِلَى السِّيْنَمَا" => "لِنَذْهَبْ-إِلَى-السِّيْنَمَا");
-    t!(test12: "dot.case" => "dot-case");
-    t!(test13: "SHOUTY.DOT.CASE" => "shouty-dot-case");
-    t!(test14: "mixed.up. dot.case with some .spaces" => "mixed-up-dot-case-with-some-spaces");
+    // Japanese and Chinese do not have word separation.
+    t!(test12: "ファイルを読み込み" => "ファイルを読み込み");
+    t!(test13: "祝你一天过得愉快" => "祝你一天过得愉快");
+    // --
+    t!(test14: "dot.case" => "dot-case");
+    t!(test15: "SHOUTY.DOT.CASE" => "shouty-dot-case");
+    t!(test16: "mixed.up. dot.case with some .spaces" => "mixed-up-dot-case-with-some-spaces");
 }

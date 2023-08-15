@@ -1,14 +1,11 @@
 [package]
-authors = ["Without Boats <woboats@gmail.com>"]
 name = "heck"
-version = "0.5.0"
-edition = "2018"
+version = "0.5.0-rc.1"
+edition = "2021"
+rust-version = "1.56"
 license = "MIT OR Apache-2.0"
 description = "heck is a case conversion library."
-homepage = "https://github.com/withoutboats/heck"
 repository = "https://github.com/withoutboats/heck"
-documentation = "https://docs.rs/heck"
 keywords = ["string", "case", "camel", "snake", "unicode"]
 categories = ["no-std"]
-readme = "README.md"
 include = ["src/**/*", "LICENSE-*", "README.md", "CHANGELOG.md"]

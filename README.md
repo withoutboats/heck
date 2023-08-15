@@ -16,8 +16,6 @@ boundary is considered to be just prior to that uppercase character.
 2. If multiple uppercase characters are consecutive, they are considered to
 be within a single word, except that the last will be part of the next word
 if it is followed by lowercase characters (see rule 1).
-3. Non-alphabetic chraracters inherit the case of the preceding character
-for use in rules 1 and 2.
 
 That is, "HelloWorld" is segmented `Hello|World` whereas "XMLHttpRequest" is
 segmented `XML|Http|Request`.
@@ -41,16 +39,6 @@ indicators are dropped, except insofar as CamelCase capitalizes the first word.
 8. Train-Case
 9. dot.case
 10. SHOUTY.DOT.CASE
-
-## Contributing
-
-PRs of additional well-established cases welcome.
-
-This library is a little bit opinionated (dropping punctuation, for example).
-If that doesn't fit your use case, I hope there is another crate that does. I
-would prefer **not** to receive PRs to make this behavior more configurable.
-
-Bug reports & fixes always welcome. :-)
 
 ## MSRV
 
