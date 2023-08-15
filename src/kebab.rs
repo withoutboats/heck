@@ -69,4 +69,7 @@ mod tests {
     t!(test9: "XΣXΣ baﬄe" => "xσxς-baﬄe");
     t!(test10: "XMLHttpRequest" => "xml-http-request");
     t!(test11: "لِنَذْهَبْ إِلَى السِّيْنَمَا" => "لِنَذْهَبْ-إِلَى-السِّيْنَمَا");
+    // Japanese and Chinese do not have word separation.
+    t!(test12: "ファイルを読み込み" => "ファイルを読み込み");
+    t!(test13: "祝你一天过得愉快" => "祝你一天过得愉快");
 }

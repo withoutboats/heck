@@ -85,5 +85,4 @@ mod tests {
     t!(test8: "this-contains_ ALLKinds OfWord_Boundaries" => "thisContainsAllKindsOfWordBoundaries");
     t!(test9: "XΣXΣ baﬄe" => "xσxςBaﬄe");
     t!(test10: "XMLHttpRequest" => "xmlHttpRequest");
-    // TODO unicode tests
 }
