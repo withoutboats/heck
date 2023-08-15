@@ -16,8 +16,6 @@ boundary is considered to be just prior to that uppercase character.
 2. If multiple uppercase characters are consecutive, they are considered to
 be within a single word, except that the last will be part of the next word
 if it is followed by lowercase characters (see rule 1).
-3. Non-alphabetic chraracters inherit the case of the preceding character
-for use in rules 1 and 2.
 
 That is, "HelloWorld" is segmented `Hello|World` whereas "XMLHttpRequest" is
 segmented `XML|Http|Request`.
