@@ -7,9 +7,9 @@ use alloc::{
 
 use crate::{uppercase, transform};
 
-/// This trait defines a upper case conversion.
+/// This trait defines an UPPER CASE conversion.
 ///
-/// In upper-case, word boundaries are indicated by hyphens.
+/// In UPPER CASE, word boundaries are indicated by spaces.
 ///
 /// ## Example:
 ///

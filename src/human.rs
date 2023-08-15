@@ -7,9 +7,9 @@ use alloc::{
 
 use crate::{capitalize, lowercase, transform};
 
-/// This trait defines a human case conversion.
+/// This trait defines a Human case conversion.
 ///
-/// In human-case, word boundaries are indicated by hyphens.
+/// In Human case, word boundaries are indicated by spaces.
 ///
 /// ## Example:
 ///
