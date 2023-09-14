@@ -3,6 +3,7 @@
 - Add `no_std` support.
 - Remove non-additive `unicode` feature. The library now uses `char::is_alphanumeric`
   instead of the `uncode-segmentation` library to determine word boundaries in all cases.
+- Add `compactlowercase` and `COMPACTUPPERCASE` casing rules.
 
 # 0.4.1
 

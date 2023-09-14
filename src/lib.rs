@@ -36,6 +36,8 @@
 //! 6. Title Case
 //! 7. SHOUTY-KEBAB-CASE
 //! 8. Train-Case
+//! 9. compactlowercase
+//! 10. COMPACTUPPERCASE
 #![deny(missing_docs)]
 #![forbid(unsafe_code)]
 #![no_std]
