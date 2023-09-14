@@ -43,6 +43,7 @@
 extern crate alloc;
 
 mod compact_lower;
+mod compact_upper;
 mod kebab;
 mod lower_camel;
 mod shouty_kebab;
@@ -53,6 +54,7 @@ mod train;
 mod upper_camel;
 
 pub use compact_lower::{AsCompactLowercase, ToCompactLowercase};
+pub use compact_upper::{AsCompactUppercase, ToCompactUppercase};
 pub use kebab::{AsKebabCase, ToKebabCase};
 pub use lower_camel::{AsLowerCamelCase, ToLowerCamelCase};
 pub use shouty_kebab::{AsShoutyKebabCase, ToShoutyKebabCase};
