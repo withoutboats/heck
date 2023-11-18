@@ -151,49 +151,7 @@ impl Display for Case {
         f.write_str(self.as_ref())
     }
 }
-/// Implements [FromStr] for [Case] using [phf](https://crates.io/crates/phf)
-///
-/// This is only available when the `phf` feature is enabled
-///
-/// This can be useful if you are super worried about performance
-#[cfg(feature = "phf")]
-mod phf_lookup {
-    use core::str::FromStr;
 
-    use crate::CaseNotFound;
-
-    use super::Case;
-    use phf::phf_map;
-    static CASES: phf::Map<&'static str, Case> = phf_map! {
-        "camelCase" => Case::LowerCamelCase,
-        "lowerCamelCase" => Case::LowerCamelCase,
-        "UpperCamelCase" => Case::UpperCamelCase,
-        "PascalCase" => Case::Pascal,
-        "lower_snake_case" => Case::Snake,
-        "snake_case" => Case::Snake,
-        "snek_case" => Case::Snake,
-        "UPPER_SNAKE_CASE" => Case::ScreamingSnake,
-        "SCREAMING_SNAKE_CASE" => Case::ScreamingSnake,
-        "SHOUTY_SNEK_CASE" => Case::ScreamingSnake,
-        "lower-kebab-case" => Case::Kebab,
-        "kebab-case" => Case::Kebab,
-        "UPPER-KEBAB-CASE" => Case::ScreamingKebab,
-        "SCREAMING-KEBAB-CASE" => Case::ScreamingKebab,
-        "TitleCase" => Case::TitleCase,
-        "Title Case" => Case::TitleCase,
-        "Train-Case" => Case::TrainCase,
-        "UPPERCASE" => Case::UpperCase,
-        "lowercase" => Case::LowerCase,
-    };
-    impl FromStr for Case {
-        type Err = CaseNotFound;
-
-        fn from_str(s: &str) -> Result<Self, Self::Err> {
-            CASES.get(s).cloned().ok_or_else(|| s.into())
-        }
-    }
-}
-#[cfg(not(feature = "phf"))]
 impl core::str::FromStr for Case {
     type Err = CaseNotFound;
 
