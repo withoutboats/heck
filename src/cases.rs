@@ -318,7 +318,7 @@ pub enum AsCase<T: AsRef<str>> {
     Pascal(AsUpperCamelCase<T>),
     /// Wrapper Around [AsSnakeCase]
     Snake(AsSnakeCase<T>),
-    /// Wrapper Around [AsShoutySnakeCase]
+    /// Wrapper Around [AsShoutySnekCase]
     ShoutySnekCase(AsShoutySnekCase<T>),
     /// Wrapper Around [AsKebabCase]
     Kebab(AsKebabCase<T>),
