@@ -51,7 +51,7 @@ mod snake;
 mod title;
 mod train;
 mod upper_camel;
-pub use cases::{AsCase, Case, CaseNotFound, ToCase};
+pub use cases::{AsCase, Case, CaseNotFound, ToCase, CASES};
 pub use kebab::{AsKebabCase, ToKebabCase};
 pub use lower_camel::{AsLowerCamelCase, ToLowerCamelCase};
 pub use shouty_kebab::{AsShoutyKebabCase, ToShoutyKebabCase};

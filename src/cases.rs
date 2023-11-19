@@ -1,9 +1,9 @@
-use core::fmt::Display;
+use core::{fmt::Display, str::FromStr};
 
 use alloc::{borrow::ToOwned, fmt, string::String};
 
 use crate::{
-    AsKebabCase, AsLowerCamelCase, AsShoutyKebabCase, AsShoutySnekCase, AsSnakeCase, AsTitleCase,
+    AsKebabCase, AsLowerCamelCase, AsShoutyKebabCase, AsShoutySnakeCase, AsSnakeCase, AsTitleCase,
     AsTrainCase, AsUpperCamelCase, ToKebabCase, ToLowerCamelCase, ToPascalCase, ToShoutyKebabCase,
     ToShoutySnakeCase, ToSnakeCase, ToTitleCase, ToTrainCase, ToUpperCamelCase,
 };
@@ -18,10 +18,44 @@ impl<T: Into<String>> From<T> for CaseNotFound {
 }
 impl Display for CaseNotFound {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "Case not found: {}", self.0)
+        write!(
+            f,
+            "Invalid Case: {:?} expected one of {}",
+            self.0, EXPTECTED_CASES
+        )
     }
 }
-
+/// Implements AsRef<str>, Into<String>, and Display for the specified case
+/// Creates a static array of all the case names
+macro_rules! variants {
+    ($($varient:ident => $name:literal),+) => {
+        #[doc = "Case variants for the `Case` enum"]
+        pub static CASES: &[&str] = &[$($name),+];
+        #[doc = "A string of all the expected case names. Formatted as [`lowerCamelCase`, `upperCamelCase`, ...]"]
+        static EXPTECTED_CASES: &str = concat!("[", $("`", $name, "`, "),+,"]");
+        impl AsRef<str> for Case {
+            fn as_ref(&self) -> &str {
+                match self {
+                    $(Case::$varient => $name),+
+                }
+            }
+        }
+        impl From<Case> for String {
+            fn from(case: Case) -> Self {
+                match case {
+                    $(Case::$varient => $name.into()),+
+                }
+            }
+        }
+        impl Display for Case {
+            fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+                match self {
+                    $(Case::$varient => f.write_str($name)),+
+                }
+            }
+        }
+    };
+}
 #[cfg(feature = "std")]
 impl std::error::Error for CaseNotFound {}
 
@@ -53,6 +87,7 @@ impl std::error::Error for CaseNotFound {}
 /// }
 /// ```
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum Case {
     /// `camelCase` is primary name
     ///
@@ -67,31 +102,31 @@ pub enum Case {
     /// `PascalCase` is primary name
     ///
     /// [See Also](ToPascalCase)
-    Pascal,
+    PascalCase,
     /// `snake_case` is primary name
     ///
     /// Other accepted names are `lower_snake_case`
     ///
     /// [See Also](ToSnakeCase)
-    Snake,
+    SnakeCase,
     /// `UPPER_SNAKE_CASE` is primary name
     ///
     /// Other accepted names are `SCREAMING_SNAKE_CASE`
     ///
     /// [See Also](ToShoutySnakeCase)
-    ScreamingSnake,
+    ScreamingSnakeCase,
     /// `kebab-case` is primary name
     ///
     /// Other accepted names are `lower-kebab-case`
     ///
     /// [See Also](ToKebabCase)
-    Kebab,
+    KebabCase,
     /// `SCREAMING-KEBAB-CASE` is primary name
     ///
     /// Other accepted names are `UPPER-KEBAB-CASE`
     ///
     /// [See Also](ToShoutyKebabCase)
-    ScreamingKebab,
+    ScreamingKebabCase,
     /// `Title Case` is the primary name
     ///
     /// Other accepted names are `TitleCase`
@@ -111,34 +146,31 @@ pub enum Case {
     /// This corresponds to the to_lowercase method in [String]
     LowerCase,
 }
-impl AsRef<str> for Case {
-    fn as_ref(&self) -> &str {
-        match self {
-            Case::LowerCamelCase => "lowerCamelCase",
-            Case::UpperCamelCase => "UpperCamelCase",
-            Case::Pascal => "PascalCase",
-            Case::Snake => "snake_case",
-            Case::ScreamingSnake => "UPPER_SNAKE_CASE",
-            Case::Kebab => "kebab-case",
-            Case::ScreamingKebab => "UPPER-KEBAB-CASE",
-            Case::TitleCase => "Title Case",
-            Case::TrainCase => "Train-Case",
-            Case::UpperCase => "UPPERCASE",
-            Case::LowerCase => "lowercase",
-        }
-    }
-}
+variants!(
+    LowerCamelCase => "lowerCamelCase",
+    UpperCamelCase => "UpperCamelCase",
+    PascalCase => "PascalCase",
+    SnakeCase => "snake_case",
+    ScreamingSnakeCase => "UPPER_SNAKE_CASE",
+    KebabCase => "kebab-case",
+    ScreamingKebabCase => "UPPER-KEBAB-CASE",
+    TitleCase => "Title Case",
+    TrainCase => "Train-Case",
+    UpperCase => "UPPERCASE",
+    LowerCase => "lowercase"
+);
+
 impl Case {
     /// Creates a [AsCase] wrapper for the specified case
     pub fn as_case<T: AsRef<str>>(&self, value: T) -> AsCase<T> {
         match self {
             Case::LowerCamelCase => AsCase::LowerCamelCase(AsLowerCamelCase(value)),
             Case::UpperCamelCase => AsCase::UpperCamelCase(AsUpperCamelCase(value)),
-            Case::Pascal => AsCase::Pascal(AsUpperCamelCase(value)),
-            Case::Snake => AsCase::Snake(AsSnakeCase(value)),
-            Case::ScreamingSnake => AsCase::ShoutySnekCase(AsShoutySnekCase(value)),
-            Case::Kebab => AsCase::Kebab(AsKebabCase(value)),
-            Case::ScreamingKebab => AsCase::ShoutyKebab(AsShoutyKebabCase(value)),
+            Case::PascalCase => AsCase::PascalCase(AsUpperCamelCase(value)),
+            Case::SnakeCase => AsCase::SnakeCase(AsSnakeCase(value)),
+            Case::ScreamingSnakeCase => AsCase::ShoutySnakeCase(AsShoutySnakeCase(value)),
+            Case::KebabCase => AsCase::KebabCase(AsKebabCase(value)),
+            Case::ScreamingKebabCase => AsCase::ShoutyKebabCase(AsShoutyKebabCase(value)),
             Case::TitleCase => AsCase::TitleCase(AsTitleCase(value)),
             Case::TrainCase => AsCase::TrainCase(AsTrainCase(value)),
             Case::UpperCase => AsCase::UpperCase(value),
@@ -146,31 +178,26 @@ impl Case {
         }
     }
 }
-impl Display for Case {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.write_str(self.as_ref())
-    }
-}
 
-impl core::str::FromStr for Case {
+impl FromStr for Case {
     type Err = CaseNotFound;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
             "camelCase" | "lowerCamelCase" => Ok(Case::LowerCamelCase),
             "UpperCamelCase" => Ok(Case::UpperCamelCase),
-            "PascalCase" => Ok(Case::Pascal),
-            "lower_snake_case" | "snake_case" | "snek_case" => Ok(Case::Snake),
+            "PascalCase" => Ok(Case::PascalCase),
+            "lower_snake_case" | "snake_case" | "snek_case" => Ok(Case::SnakeCase),
             "UPPER_SNAKE_CASE" | "SCREAMING_SNAKE_CASE" | "SHOUTY_SNEK_CASE" => {
-                Ok(Case::ScreamingSnake)
+                Ok(Case::ScreamingSnakeCase)
             }
-            "lower-kebab-case" | "kebab-case" => Ok(Case::Kebab),
-            "UPPER-KEBAB-CASE" | "SCREAMING-KEBAB-CASE" => Ok(Case::ScreamingKebab),
+            "lower-kebab-case" | "kebab-case" => Ok(Case::KebabCase),
+            "UPPER-KEBAB-CASE" | "SCREAMING-KEBAB-CASE" => Ok(Case::ScreamingKebabCase),
             "TitleCase" | "Title Case" => Ok(Case::TitleCase),
             "Train-Case" => Ok(Case::TrainCase),
             "UPPERCASE" => Ok(Case::UpperCase),
             "lowercase" => Ok(Case::LowerCase),
-            _ => return Result::Err(s.into()),
+            _ => Result::Err(s.into()),
         }
     }
 }
@@ -180,6 +207,14 @@ impl TryFrom<String> for Case {
 
     #[inline(always)]
     fn try_from(s: String) -> Result<Self, Self::Error> {
+        s.parse()
+    }
+}
+impl TryFrom<&str> for Case {
+    type Error = CaseNotFound;
+
+    #[inline(always)]
+    fn try_from(s: &str) -> Result<Self, Self::Error> {
         s.parse()
     }
 }
@@ -195,11 +230,11 @@ impl TryFrom<String> for Case {
 /// let cases = vec![
 ///   (Case::LowerCamelCase, "weAreGoingToInheritTheEarth"),
 ///   (Case::UpperCamelCase, "WeAreGoingToInheritTheEarth"),
-///   (Case::Pascal, "WeAreGoingToInheritTheEarth"),
-///   (Case::Snake, "we_are_going_to_inherit_the_earth"),
-///   (Case::ScreamingSnake, "WE_ARE_GOING_TO_INHERIT_THE_EARTH"),
-///   (Case::Kebab, "we-are-going-to-inherit-the-earth"),
-///   (Case::ScreamingKebab, "WE-ARE-GOING-TO-INHERIT-THE-EARTH"),
+///   (Case::PascalCase, "WeAreGoingToInheritTheEarth"),
+///   (Case::SnakeCase, "we_are_going_to_inherit_the_earth"),
+///   (Case::ScreamingSnakeCase, "WE_ARE_GOING_TO_INHERIT_THE_EARTH"),
+///   (Case::KebabCase, "we-are-going-to-inherit-the-earth"),
+///   (Case::ScreamingKebabCase, "WE-ARE-GOING-TO-INHERIT-THE-EARTH"),
 ///   (Case::TitleCase, "We Are Going To Inherit The Earth"),
 ///   (Case::TrainCase, "We-Are-Going-To-Inherit-The-Earth"),
 ///   (Case::UpperCase, "WE ARE GOING TO INHERIT THE EARTH"),
@@ -230,11 +265,11 @@ impl ToCase for str {
         match case {
             Case::LowerCamelCase => self.to_lower_camel_case(),
             Case::UpperCamelCase => self.to_upper_camel_case(),
-            Case::Pascal => self.to_pascal_case(),
-            Case::Snake => self.to_snake_case(),
-            Case::ScreamingSnake => self.to_shouty_snake_case(),
-            Case::Kebab => self.to_kebab_case(),
-            Case::ScreamingKebab => self.to_shouty_kebab_case(),
+            Case::PascalCase => self.to_pascal_case(),
+            Case::SnakeCase => self.to_snake_case(),
+            Case::ScreamingSnakeCase => self.to_shouty_snake_case(),
+            Case::KebabCase => self.to_kebab_case(),
+            Case::ScreamingKebabCase => self.to_shouty_kebab_case(),
             Case::TitleCase => self.to_title_case(),
             Case::TrainCase => self.to_train_case(),
             Case::UpperCase => self.to_uppercase(),
@@ -252,11 +287,11 @@ impl ToCase for str {
 /// let cases = vec![
 ///   (Case::LowerCamelCase, "weAreGoingToInheritTheEarth"),
 ///   (Case::UpperCamelCase, "WeAreGoingToInheritTheEarth"),
-///   (Case::Pascal, "WeAreGoingToInheritTheEarth"),
-///   (Case::Snake, "we_are_going_to_inherit_the_earth"),
-///   (Case::ScreamingSnake, "WE_ARE_GOING_TO_INHERIT_THE_EARTH"),
-///   (Case::Kebab, "we-are-going-to-inherit-the-earth"),
-///   (Case::ScreamingKebab, "WE-ARE-GOING-TO-INHERIT-THE-EARTH"),
+///   (Case::PascalCase, "WeAreGoingToInheritTheEarth"),
+///   (Case::SnakeCase, "we_are_going_to_inherit_the_earth"),
+///   (Case::ScreamingSnakeCase, "WE_ARE_GOING_TO_INHERIT_THE_EARTH"),
+///   (Case::KebabCase, "we-are-going-to-inherit-the-earth"),
+///   (Case::ScreamingKebabCase, "WE-ARE-GOING-TO-INHERIT-THE-EARTH"),
 ///   (Case::TitleCase, "We Are Going To Inherit The Earth"),
 ///   (Case::TrainCase, "We-Are-Going-To-Inherit-The-Earth"),
 ///   (Case::UpperCase, "WE ARE GOING TO INHERIT THE EARTH"),
@@ -267,21 +302,22 @@ impl ToCase for str {
 ///   assert_eq!(format!("{}", AsCase::from((original, case))), expected);
 /// }
 /// ```
+#[non_exhaustive]
 pub enum AsCase<T: AsRef<str>> {
     /// Wrapper Around [AsLowerCamelCase]
     LowerCamelCase(AsLowerCamelCase<T>),
     /// Wrapper Around [AsUpperCamelCase]
     UpperCamelCase(AsUpperCamelCase<T>),
     /// Wrapper Around [AsUpperCamelCase]
-    Pascal(AsUpperCamelCase<T>),
+    PascalCase(AsUpperCamelCase<T>),
     /// Wrapper Around [AsSnakeCase]
-    Snake(AsSnakeCase<T>),
+    SnakeCase(AsSnakeCase<T>),
     /// Wrapper Around [AsShoutySnekCase]
-    ShoutySnekCase(AsShoutySnekCase<T>),
+    ShoutySnakeCase(AsShoutySnakeCase<T>),
     /// Wrapper Around [AsKebabCase]
-    Kebab(AsKebabCase<T>),
+    KebabCase(AsKebabCase<T>),
     /// Wrapper Around [AsShoutyKebabCase]
-    ShoutyKebab(AsShoutyKebabCase<T>),
+    ShoutyKebabCase(AsShoutyKebabCase<T>),
     /// Wrapper Around [AsTitleCase]
     TitleCase(AsTitleCase<T>),
     /// Wrapper Around [AsTrainCase]
@@ -296,6 +332,18 @@ impl<T: AsRef<str>> From<(T, Case)> for AsCase<T> {
         case.as_case(s)
     }
 }
+/// Converts the case from the name and creates an AsCase wrapper
+///
+/// # Arguments
+/// - First argument is the string to convert
+/// - Second argument is the name of the case
+impl<T: AsRef<str>> TryFrom<(T, &str)> for AsCase<T> {
+    type Error = CaseNotFound;
+
+    fn try_from((s, case): (T, &str)) -> Result<Self, Self::Error> {
+        Case::from_str(case).map(|v| v.as_case(s))
+    }
+}
 
 impl<T: AsRef<str>> fmt::Display for AsCase<T> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -306,11 +354,11 @@ impl<T: AsRef<str>> fmt::Display for AsCase<T> {
         match self {
             AsCase::LowerCamelCase(s) => s.fmt(f),
             AsCase::UpperCamelCase(s) => s.fmt(f),
-            AsCase::Pascal(s) => s.fmt(f),
-            AsCase::Snake(s) => s.fmt(f),
-            AsCase::ShoutySnekCase(s) => s.fmt(f),
-            AsCase::Kebab(s) => s.fmt(f),
-            AsCase::ShoutyKebab(s) => s.fmt(f),
+            AsCase::PascalCase(s) => s.fmt(f),
+            AsCase::SnakeCase(s) => s.fmt(f),
+            AsCase::ShoutySnakeCase(s) => s.fmt(f),
+            AsCase::KebabCase(s) => s.fmt(f),
+            AsCase::ShoutyKebabCase(s) => s.fmt(f),
             AsCase::TitleCase(s) => s.fmt(f),
             AsCase::TrainCase(s) => s.fmt(f),
             AsCase::UpperCase(s) => write!(f, "{}", s.as_ref().to_uppercase()),
