@@ -72,4 +72,12 @@ mod tests {
     // Japanese and Chinese do not have word separation.
     t!(test12: "ファイルを読み込み" => "ファイルを読み込み");
     t!(test13: "祝你一天过得愉快" => "祝你一天过得愉快");
+    t!(test14: "ファイルを読み込み" => "ファイルを読み込み");
+    t!(test15: "お前はもう死んでいる！何？" => "お前はもう死んでいる何");
+    t!(test16: "石室诗士施氏，嗜狮，誓食十狮。" => "石室诗士施氏嗜狮誓食十狮");
+    t!(test17: "石室詩士施氏，嗜獅，誓食十獅。" => "石室詩士施氏嗜獅誓食十獅");
+    t!(test18: "ㄕˊㄕˋㄕㄕˋㄕㄕˋ，ㄕˋㄕ，ㄕˋㄕˊㄕˊㄕ。" => "ㄕˊㄕˋㄕㄕˋㄕㄕˋㄕˋㄕㄕˋㄕˊㄕˊㄕ");
+    t!(test19: "shí shì shī shì shī shì ， shì shī ， shì shí shí shī 。" => "shí-shì-shī-shì-shī-shì-shì-shī-shì-shí-shí-shī");
+    t!(test20: "sek6 sat1 si1 si6 si1 si6 ，si3 si1 ，sai6 sik6 sap6 si1 。" => "sek6-sat1-si1-si6-si1-si6-si3-si1-sai6-sik6-sap6-si1");
+    t!(test21: "唱K" => "唱k");
 }
