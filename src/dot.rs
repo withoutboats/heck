@@ -6,7 +6,7 @@ use crate::{lowercase, transform};
 
 /// This trait defines a dot case conversion.
 ///
-/// In dot-case, word boundaries are indicated by hyphens.
+/// In dot-case, word boundaries are indicated by dots.
 ///
 /// ## Example:
 ///
