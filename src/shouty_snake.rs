@@ -31,6 +31,7 @@ pub trait ToShoutySnekCase: ToOwned {
 }
 
 impl<T: ?Sized + ToShoutySnakeCase> ToShoutySnekCase for T {
+    #[allow(non_snake_case)]
     fn TO_SHOUTY_SNEK_CASE(&self) -> Self::Owned {
         self.to_shouty_snake_case()
     }
