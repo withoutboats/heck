@@ -36,12 +36,14 @@
 //! 6. Title Case
 //! 7. SHOUTY-KEBAB-CASE
 //! 8. Train-Case
+//! 9. Dot.Case
 #![deny(missing_docs)]
 #![forbid(unsafe_code)]
 #![no_std]
 
 extern crate alloc;
 
+mod dot;
 mod kebab;
 mod lower_camel;
 mod shouty_kebab;
@@ -51,6 +53,7 @@ mod title;
 mod train;
 mod upper_camel;
 
+pub use dot::{AsDotCase, ToDotCase};
 pub use kebab::{AsKebabCase, ToKebabCase};
 pub use lower_camel::{AsLowerCamelCase, ToLowerCamelCase};
 pub use shouty_kebab::{AsShoutyKebabCase, ToShoutyKebabCase};
