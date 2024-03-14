@@ -1,3 +1,7 @@
+//! Construct a lookup table to find whether a particular character is a nonspacing mark
+//! (general category `Nonspacing_Mark` or `Enclosing_Mark`).
+//! These characters are ignored when determining word boundaries.
+
 use std::{
     any::type_name,
     collections::hash_map,

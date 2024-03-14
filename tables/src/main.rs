@@ -3,16 +3,16 @@ use std::{
     io::{BufWriter, Write},
 };
 
-mod unicode_data;
-use unicode_data::data_files;
-
-/// Update this on new Unicode releases
-const UNICODE_VERSION: (u8, u8, u8) = (15, 1, 0);
-
 mod allowed_in_word;
 mod letter_casing;
 mod nonspacing_marks;
 mod titlecase;
+mod unicode_data;
+
+use unicode_data::data_files;
+
+/// Update this on new Unicode releases
+const UNICODE_VERSION: (u8, u8, u8) = (15, 1, 0);
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let data = data_files()?;

@@ -1,3 +1,10 @@
+//! Construct a lookup table for the casing status of a letter
+//! (lowercase, uppercase, or titlecase).
+//!
+//! This table only concerns itself with letters:
+//! for obtaining the case of characters which are not letters,
+//! use the functions from `core`.
+
 use std::{any::type_name, collections::hash_map, error::Error, io, mem::size_of};
 
 use bitvec::prelude::*;

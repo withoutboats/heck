@@ -1,3 +1,6 @@
+//! Construct table for titlecase character mappings.
+//! Only characters whose titlecase differs from their uppercase are included.
+
 use std::{error::Error, io, mem::size_of};
 
 use regex::Regex;
