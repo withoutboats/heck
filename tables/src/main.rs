@@ -7,6 +7,8 @@ use unicode_data::data_files;
 const UNICODE_VERSION: (u8, u8, u8) = (15, 1, 0);
 
 mod allowed_in_word;
+mod letter_casing;
+mod nonspacing_marks;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let data = data_files()?;
@@ -32,6 +34,10 @@ pub const UNICODE_VERSION: (u8, u8, u8) = {UNICODE_VERSION:?};
 
     let allowed_in_word = allowed_in_word::allowed_in_word(&data);
     allowed_in_word::write_table(&mut out, &allowed_in_word)?;
+
+    letter_casing::write_table(&mut out, &data, &allowed_in_word)?;
+
+    nonspacing_marks::write_table(&mut out, &data)?;
 
     Ok(())
 }

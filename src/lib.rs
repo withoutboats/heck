@@ -6,25 +6,9 @@
 //!
 //! ## Definition of a word boundary
 //!
-//! Word boundaries are defined by non-alphanumeric characters, as well as
-//! within those words in this manner:
-//!
-//! 1. If an uppercase character is followed by lowercase letters, a word
-//! boundary is considered to be just prior to that uppercase character.
-//! 2. If multiple uppercase characters are consecutive, they are considered to
-//! be within a single word, except that the last will be part of the next word
-//! if it is followed by lowercase characters (see rule 1).
-//!
-//! That is, "HelloWorld" is segmented `Hello|World` whereas "XMLHttpRequest" is
-//! segmented `XML|Http|Request`.
-//!
-//! Characters not within words (such as spaces, punctuations, and underscores)
-//! are not included in the output string except as they are a part of the case
-//! being converted to. Multiple adjacent word boundaries (such as a series of
-//! underscores) are folded into one. ("hello__world" in snake case is therefore
-//! "hello_world", not the exact same string). Leading or trailing word boundary
-//! indicators are dropped, except insofar as CamelCase capitalizes the first
-//! word.
+//! Word boundaries are defined by the specification of
+//! [identifier chunks](https://www.unicode.org/reports/tr55/#Identifier-Chunks)
+//! in Unicode Technical Standard 55.
 //!
 //! ### Cases contained in this library:
 //!
@@ -68,6 +52,8 @@ pub use upper_camel::{
 
 use core::fmt;
 
+use tables::{is_non_greek_titlecase, CasedLetterKind};
+
 fn transform<F, G>(
     s: &str,
     mut with_word: F,
@@ -78,82 +64,100 @@ where
     F: FnMut(&str, &mut fmt::Formatter) -> fmt::Result,
     G: FnMut(&mut fmt::Formatter) -> fmt::Result,
 {
-    /// Tracks the current 'mode' of the transformation algorithm as it scans
-    /// the input string.
-    ///
-    /// The mode is a tri-state which tracks the case of the last cased
-    /// character of the current word. If there is no cased character
-    /// (either lowercase or uppercase) since the previous word boundary,
-    /// than the mode is `Boundary`. If the last cased character is lowercase,
-    /// then the mode is `Lowercase`. Othertherwise, the mode is
-    /// `Uppercase`.
-    #[derive(Clone, Copy, PartialEq)]
-    enum WordMode {
-        /// There have been no lowercase or uppercase characters in the current
-        /// word.
-        Boundary,
-        /// The previous cased character in the current word is lowercase.
-        Lowercase,
-        /// The previous cased character in the current word is uppercase.
-        Uppercase,
-    }
-
     let mut first_word = true;
 
     for word in s.split(|c: char| !tables::allowed_in_word(c)) {
-        let mut char_indices = word.char_indices().peekable();
-        let mut init = 0;
-        let mut mode = WordMode::Boundary;
+        let mut start_of_word_idx = 0;
+        // Whether the previous character seen, ignoring nonspacing marks,
+        // was lowercase or non-Greek titlecase.
+        // Used for determining CamelBoundaries.
+        let mut prev_was_lowercase_or_non_greek_titlecase = false;
+        // If the previous character seen, ignoring nonspacing marks,
+        // was uppercase or titlecase, then this stores that character's index.
+        // Otherwise, it stores `None`.
+        // Used for determining HATBoundaries.
+        let mut index_of_preceding_uppercase_or_titlecase_letter: Option<usize> = None;
 
-        while let Some((i, c)) = char_indices.next() {
-            if let Some(&(next_i, next)) = char_indices.peek() {
-                // The mode including the current character, assuming the
-                // current character does not result in a word boundary.
-                let next_mode = if c.is_lowercase() {
-                    WordMode::Lowercase
-                } else if c.is_uppercase() {
-                    WordMode::Uppercase
-                } else {
-                    mode
-                };
-
-                // Word boundary after if current is not uppercase and next
-                // is uppercase
-                if next_mode == WordMode::Lowercase && next.is_uppercase() {
-                    if !first_word {
-                        boundary(f)?;
+        for (i, c) in word.char_indices() {
+            match tables::letter_casing(c) {
+                None => {
+                    // Nonspacing marks are ignored for the purpose of determining boundaries.
+                    if !tables::is_nonspacing_mark(c) {
+                        prev_was_lowercase_or_non_greek_titlecase = false;
+                        index_of_preceding_uppercase_or_titlecase_letter = None;
                     }
-                    with_word(&word[init..next_i], f)?;
-                    first_word = false;
-                    init = next_i;
-                    mode = WordMode::Boundary;
-
-                // Otherwise if current and previous are uppercase and next
-                // is lowercase, word boundary before
-                } else if mode == WordMode::Uppercase && c.is_uppercase() && next.is_lowercase() {
-                    if !first_word {
-                        boundary(f)?;
+                }
+                Some(CasedLetterKind::Lowercase) => {
+                    prev_was_lowercase_or_non_greek_titlecase = true;
+                    // There is a HATBoundary before an uppercase or titlecase letter followed by a lowercase letter
+                    if let Some(preceding_idx) = index_of_preceding_uppercase_or_titlecase_letter {
+                        index_of_preceding_uppercase_or_titlecase_letter = None;
+                        if preceding_idx != start_of_word_idx {
+                            if !first_word {
+                                boundary(f)?;
+                            } else {
+                                first_word = false;
+                            }
+                            with_word(&word[start_of_word_idx..preceding_idx], f)?;
+                            start_of_word_idx = preceding_idx;
+                        }
+                    }
+                }
+                Some(CasedLetterKind::Uppercase) => {
+                    index_of_preceding_uppercase_or_titlecase_letter = Some(i);
+                    // There is a CamelBoundary before an uppercase letter
+                    // that is preceded by a lowercase or non-Greek titlecase letter
+                    if prev_was_lowercase_or_non_greek_titlecase {
+                        prev_was_lowercase_or_non_greek_titlecase = false;
+                        if !first_word {
+                            boundary(f)?;
+                        } else {
+                            first_word = false;
+                        }
+                        with_word(&word[start_of_word_idx..i], f)?;
+                        start_of_word_idx = i;
+                    }
+                }
+                Some(CasedLetterKind::Titlecase) => {
+                    index_of_preceding_uppercase_or_titlecase_letter = Some(i);
+                    // There is always a HATBoundary before a non-Greek titlecase letter
+                    if is_non_greek_titlecase(c) {
+                        prev_was_lowercase_or_non_greek_titlecase = true;
+                        if i != start_of_word_idx {
+                            if !first_word {
+                                boundary(f)?;
+                            } else {
+                                first_word = false;
+                            }
+                            with_word(&word[start_of_word_idx..i], f)?;
+                            start_of_word_idx = i;
+                        }
                     } else {
-                        first_word = false;
+                        // There is a CamelBoundary before a titlecase letter
+                        // that is preceded by a lowercase or non-Greek titlecase letter
+                        if prev_was_lowercase_or_non_greek_titlecase {
+                            prev_was_lowercase_or_non_greek_titlecase = false;
+                            if !first_word {
+                                boundary(f)?;
+                            } else {
+                                first_word = false;
+                            }
+                            with_word(&word[start_of_word_idx..i], f)?;
+                            start_of_word_idx = i;
+                        }
                     }
-                    with_word(&word[init..i], f)?;
-                    init = i;
-                    mode = WordMode::Boundary;
-
-                // Otherwise no word boundary, just update the mode
-                } else {
-                    mode = next_mode;
                 }
-            } else {
-                // Collect trailing characters as a word
-                if !first_word {
-                    boundary(f)?;
-                } else {
-                    first_word = false;
-                }
-                with_word(&word[init..], f)?;
-                break;
             }
+        }
+
+        if start_of_word_idx != word.len() {
+            // Collect trailing characters as a word
+            if !first_word {
+                boundary(f)?;
+            } else {
+                first_word = false;
+            }
+            with_word(&word[start_of_word_idx..], f)?;
         }
     }
 

@@ -74,14 +74,29 @@ mod tests {
     t!(test12: "99BOTTLES" => "99bottles");
     t!(test13: "FieldNamE11" => "Field-Nam-E11");
     t!(test14: "abc123def456" => "Abc123def456");
-    t!(test16: "abc123DEF456" => "Abc123-Def456");
+    t!(test16: "abc123DEF456" => "Abc123def456");
     t!(test17: "abc123Def456" => "Abc123-Def456");
-    t!(test18: "abc123DEf456" => "Abc123-D-Ef456");
+    t!(test18: "abc123DEf456" => "Abc123d-Ef456");
     t!(test19: "ABC123def456" => "Abc123def456");
     t!(test20: "ABC123DEF456" => "Abc123def456");
     t!(test21: "ABC123Def456" => "Abc123-Def456");
     t!(test22: "ABC123DEf456" => "Abc123d-Ef456");
-    t!(test23: "ABC123dEEf456FOO" => "Abc123d-E-Ef456-Foo");
+    t!(test23: "ABC123dEEf456FOO" => "Abc123d-E-Ef456foo");
     t!(test24: "abcDEF" => "Abc-Def");
     t!(test25: "ABcDE" => "A-Bc-De");
+
+    t!(uts55_test1: "TypeII" => "Type-Ii");
+    t!(uts55_test2: "OCaml" => "O-Caml");
+    t!(uts55_test3: "HTTPЗапрос" => "Http-Запрос");
+    t!(uts55_test4: "UAX9ClauseHL4" => "Uax9-Clause-Hl4");
+    t!(uts55_test5: "LOUD_SNAKE" => "Loud-Snake");
+
+    t!(uts55_test6: "Fancy_Snake" => "Fancy-Snake");
+    t!(uts55_test7: "snake-kebab" => "Snake-Kebab");
+    t!(uts55_test8: "Paral·lel" => "Paral·lel");
+    t!(uts55_test9: "microB" => "Micro-B");
+    t!(uts55_test10: "microᖯ" => "Microᖯ");
+    t!(uts55_test11: "HTTPसर्वर" => "Httpसर्वर");
+    t!(uts55_test12: "dromedaryCamel" => "Dromedary-Camel");
+    t!(uts55_test13: "snakeELEPHANTSnake" => "Snake-Elephant-Snake");
 }

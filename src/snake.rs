@@ -87,14 +87,14 @@ mod tests {
     t!(test12: "99BOTTLES" => "99bottles");
     t!(test13: "FieldNamE11" => "field_nam_e11");
     t!(test14: "abc123def456" => "abc123def456");
-    t!(test16: "abc123DEF456" => "abc123_def456");
+    t!(test16: "abc123DEF456" => "abc123def456");
     t!(test17: "abc123Def456" => "abc123_def456");
-    t!(test18: "abc123DEf456" => "abc123_d_ef456");
+    t!(test18: "abc123DEf456" => "abc123d_ef456");
     t!(test19: "ABC123def456" => "abc123def456");
     t!(test20: "ABC123DEF456" => "abc123def456");
     t!(test21: "ABC123Def456" => "abc123_def456");
     t!(test22: "ABC123DEf456" => "abc123d_ef456");
-    t!(test23: "ABC123dEEf456FOO" => "abc123d_e_ef456_foo");
+    t!(test23: "ABC123dEEf456FOO" => "abc123d_e_ef456foo");
     t!(test24: "abcDEF" => "abc_def");
     t!(test25: "ABcDE" => "a_bc_de");
 }
