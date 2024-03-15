@@ -35,7 +35,7 @@ fn unassigned_private_use(data: &DataFiles) -> CodepointBitArr {
 }
 
 /// `true` for all codepoints that can be part of a word:
-/// `[\p{Unassigned}\p{Private_Use}\p{ID_Continue}\p{ID_Compat_Math_Continue}-[\p{Punctuation}-\p{Other_Punctuation}]]`,
+/// `[\p{ID_Continue}\p{ID_Compat_Math_Continue}\p{Cn}\p{Co}\p{Alphabetic}\p{N}-[\p{P}-\p{Po}]]`,
 /// plus the extra characters listed below.
 pub fn allowed_in_word(data: &DataFiles) -> CodepointBitArr {
     let mut word_component = unassigned_private_use(data);
@@ -43,9 +43,11 @@ pub fn allowed_in_word(data: &DataFiles) -> CodepointBitArr {
     set_by_prop(
         &mut word_component,
         &data.derived_core_properties,
-        "ID_Continue",
+        "ID_Continue|Alphabetic",
         true,
     );
+
+    set_by_general_category(&mut word_component, data, "Nd|Nl|No", true);
 
     set_by_prop(
         &mut word_component,

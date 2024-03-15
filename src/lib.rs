@@ -11,7 +11,7 @@
 //! in Unicode Technical Standard 55. The rules are as follows:
 //!
 //! - The set of characters that can be in a word is
-//!   [`[\p{ID_Continue}\p{ID_Compat_Math_Continue}\p{Unassigned}\p{Private_Use}-[\p{Punctuation}-\p{Other_Punctuation}]]`][1],
+//!   [`[\p{ID_Continue}\p{ID_Compat_Math_Continue}\p{Cn}\p{Co}\p{Alphabetic}\p{N}-[\p{P}-\p{Po}]]`][1],
 //!   plus U+05F3, U+05F4, and U+0F0B. This notably includes
 //!   alphabetic and numeric characters, accents and other combining marks,
 //!   emoji, a few mathematical symbols, a few non-word-separating punctuation marks,
@@ -41,7 +41,7 @@
 //!    by some number of nonspacing marks (like accents or other diacritics)
 //!    is treated as if it was the letter alone. For example, `áB` is segmented `á`|`B`.
 //!
-//! [1]: https://util.unicode.org/UnicodeJsps/list-unicodeset.jsp?a=%5B%5Cp%7BID_Continue%7D%5Cp%7BID_Compat_Math_Continue%7D%5Cp%7BUnassigned%7D%5Cp%7BPrivate_Use%7D-%5B%5Cp%7BPunctuation%7D-%5Cp%7BOther_Punctuation%7D%5D%5D&abb=on
+//! [1]: https://util.unicode.org/UnicodeJsps/list-unicodeset.jsp?a=%5B%5Cp%7BID_Continue%7D%5Cp%7BID_Compat_Math_Continue%7D%5Cp%7BCn%7D%5Cp%7BCo%7D%5Cp%7BAlphabetic%7D%5Cp%7BN%7D-%5B%5Cp%7BP%7D-%5Cp%7BPo%7D%5D%5D&abb=on&g=&i=
 //!
 //! ### Cases contained in this library:
 //!
