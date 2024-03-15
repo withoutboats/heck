@@ -97,4 +97,10 @@ mod tests {
     t!(test23: "ABC123dEEf456FOO" => "abc123d_e_ef456_foo");
     t!(test24: "abcDEF" => "abc_def");
     t!(test25: "ABcDE" => "a_bc_de");
+    t!(test26: "Σ" => "σ");
+    t!(test27: "ファΣ" => "ファσ");
+    t!(test28: "X̂Σ" => "x̂ς");
+    t!(test29: "XΣ̂" => "xς̂");
+    t!(test30: "XΣフ" => "xςフ");
+    t!(test31: "XΣA" => "xσa");
 }
