@@ -792,3 +792,229 @@ static NONSPACING_MARKS_LEAVES: [u128; 107] = [
     0x00000000007F00000000000000000000,
     0x00000000000007F00000000000000000,
 ];
+
+use core::{
+    fmt::{self, Write},
+    iter,
+};
+
+#[derive(Clone, Debug)]
+pub enum ToTitlecase {
+    Zero,
+    One(char),
+    Two(char, char),
+    Three(char, char, char),
+}
+
+impl Iterator for ToTitlecase {
+    type Item = char;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        match *self {
+            Self::Zero => None,
+            Self::One(c) => {
+                *self = Self::Zero;
+                Some(c)
+            }
+            Self::Two(b, c) => {
+                *self = Self::One(c);
+                Some(b)
+            }
+            Self::Three(a, b, c) => {
+                *self = Self::Two(b, c);
+                Some(a)
+            }
+        }
+    }
+
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        let size = match self {
+            Self::Zero => 0,
+            Self::One(_) => 1,
+            Self::Two(..) => 2,
+            Self::Three(..) => 3,
+        };
+        (size, Some(size))
+    }
+}
+
+impl iter::ExactSizeIterator for ToTitlecase {}
+
+impl iter::FusedIterator for ToTitlecase {}
+
+impl fmt::Display for ToTitlecase {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        for c in self.clone() {
+            f.write_char(c)?;
+        }
+        Ok(())
+    }
+}
+
+/// Returns an iterator that yields the titlecase mapping of this `char` as one or more `char`s.
+pub fn to_titlecase(c: char) -> ToTitlecase {
+    // ASCII fast path
+    if c.is_ascii() {
+        ToTitlecase::One(c.to_ascii_uppercase())
+    } else if let Ok(idx) = TITLECASE_MAPPINGS.binary_search_by_key(&c, |&(c2, _)| c2) {
+        match TITLECASE_MAPPINGS[idx].1 {
+            [None, ..] => ToTitlecase::Zero,
+            [Some(a), None, ..] => ToTitlecase::One(a),
+            [Some(a), Some(b), None] => ToTitlecase::Two(a, b),
+            [Some(a), Some(b), Some(c)] => ToTitlecase::Three(a, b, c),
+        }
+    } else {
+        let mut uppercase = c.to_uppercase();
+        match uppercase.size_hint().0 {
+            0 => ToTitlecase::Zero,
+            1 => ToTitlecase::One(uppercase.next().unwrap()),
+            2 => ToTitlecase::Two(uppercase.next().unwrap(), uppercase.next().unwrap()),
+            3 => ToTitlecase::Three(
+                uppercase.next().unwrap(),
+                uppercase.next().unwrap(),
+                uppercase.next().unwrap(),
+            ),
+            _ => unreachable!(),
+        }
+    }
+}
+
+/// Sorted list of characters and their titlecase mappings.
+/// Only characters whose titlecase differs from uppercase are included.
+static TITLECASE_MAPPINGS: [(char, [Option<char>; 3]); 135] = [
+    ('ß', [Some('S'), Some('s'), None]),
+    ('Ǆ', [Some('ǅ'), None, None]),
+    ('ǅ', [Some('ǅ'), None, None]),
+    ('ǆ', [Some('ǅ'), None, None]),
+    ('Ǉ', [Some('ǈ'), None, None]),
+    ('ǈ', [Some('ǈ'), None, None]),
+    ('ǉ', [Some('ǈ'), None, None]),
+    ('Ǌ', [Some('ǋ'), None, None]),
+    ('ǋ', [Some('ǋ'), None, None]),
+    ('ǌ', [Some('ǋ'), None, None]),
+    ('Ǳ', [Some('ǲ'), None, None]),
+    ('ǲ', [Some('ǲ'), None, None]),
+    ('ǳ', [Some('ǲ'), None, None]),
+    ('և', [Some('Ե'), Some('ւ'), None]),
+    ('ა', [Some('ა'), None, None]),
+    ('ბ', [Some('ბ'), None, None]),
+    ('გ', [Some('გ'), None, None]),
+    ('დ', [Some('დ'), None, None]),
+    ('ე', [Some('ე'), None, None]),
+    ('ვ', [Some('ვ'), None, None]),
+    ('ზ', [Some('ზ'), None, None]),
+    ('თ', [Some('თ'), None, None]),
+    ('ი', [Some('ი'), None, None]),
+    ('კ', [Some('კ'), None, None]),
+    ('ლ', [Some('ლ'), None, None]),
+    ('მ', [Some('მ'), None, None]),
+    ('ნ', [Some('ნ'), None, None]),
+    ('ო', [Some('ო'), None, None]),
+    ('პ', [Some('პ'), None, None]),
+    ('ჟ', [Some('ჟ'), None, None]),
+    ('რ', [Some('რ'), None, None]),
+    ('ს', [Some('ს'), None, None]),
+    ('ტ', [Some('ტ'), None, None]),
+    ('უ', [Some('უ'), None, None]),
+    ('ფ', [Some('ფ'), None, None]),
+    ('ქ', [Some('ქ'), None, None]),
+    ('ღ', [Some('ღ'), None, None]),
+    ('ყ', [Some('ყ'), None, None]),
+    ('შ', [Some('შ'), None, None]),
+    ('ჩ', [Some('ჩ'), None, None]),
+    ('ც', [Some('ც'), None, None]),
+    ('ძ', [Some('ძ'), None, None]),
+    ('წ', [Some('წ'), None, None]),
+    ('ჭ', [Some('ჭ'), None, None]),
+    ('ხ', [Some('ხ'), None, None]),
+    ('ჯ', [Some('ჯ'), None, None]),
+    ('ჰ', [Some('ჰ'), None, None]),
+    ('ჱ', [Some('ჱ'), None, None]),
+    ('ჲ', [Some('ჲ'), None, None]),
+    ('ჳ', [Some('ჳ'), None, None]),
+    ('ჴ', [Some('ჴ'), None, None]),
+    ('ჵ', [Some('ჵ'), None, None]),
+    ('ჶ', [Some('ჶ'), None, None]),
+    ('ჷ', [Some('ჷ'), None, None]),
+    ('ჸ', [Some('ჸ'), None, None]),
+    ('ჹ', [Some('ჹ'), None, None]),
+    ('ჺ', [Some('ჺ'), None, None]),
+    ('ჽ', [Some('ჽ'), None, None]),
+    ('ჾ', [Some('ჾ'), None, None]),
+    ('ჿ', [Some('ჿ'), None, None]),
+    ('ᾀ', [Some('ᾈ'), None, None]),
+    ('ᾁ', [Some('ᾉ'), None, None]),
+    ('ᾂ', [Some('ᾊ'), None, None]),
+    ('ᾃ', [Some('ᾋ'), None, None]),
+    ('ᾄ', [Some('ᾌ'), None, None]),
+    ('ᾅ', [Some('ᾍ'), None, None]),
+    ('ᾆ', [Some('ᾎ'), None, None]),
+    ('ᾇ', [Some('ᾏ'), None, None]),
+    ('ᾈ', [Some('ᾈ'), None, None]),
+    ('ᾉ', [Some('ᾉ'), None, None]),
+    ('ᾊ', [Some('ᾊ'), None, None]),
+    ('ᾋ', [Some('ᾋ'), None, None]),
+    ('ᾌ', [Some('ᾌ'), None, None]),
+    ('ᾍ', [Some('ᾍ'), None, None]),
+    ('ᾎ', [Some('ᾎ'), None, None]),
+    ('ᾏ', [Some('ᾏ'), None, None]),
+    ('ᾐ', [Some('ᾘ'), None, None]),
+    ('ᾑ', [Some('ᾙ'), None, None]),
+    ('ᾒ', [Some('ᾚ'), None, None]),
+    ('ᾓ', [Some('ᾛ'), None, None]),
+    ('ᾔ', [Some('ᾜ'), None, None]),
+    ('ᾕ', [Some('ᾝ'), None, None]),
+    ('ᾖ', [Some('ᾞ'), None, None]),
+    ('ᾗ', [Some('ᾟ'), None, None]),
+    ('ᾘ', [Some('ᾘ'), None, None]),
+    ('ᾙ', [Some('ᾙ'), None, None]),
+    ('ᾚ', [Some('ᾚ'), None, None]),
+    ('ᾛ', [Some('ᾛ'), None, None]),
+    ('ᾜ', [Some('ᾜ'), None, None]),
+    ('ᾝ', [Some('ᾝ'), None, None]),
+    ('ᾞ', [Some('ᾞ'), None, None]),
+    ('ᾟ', [Some('ᾟ'), None, None]),
+    ('ᾠ', [Some('ᾨ'), None, None]),
+    ('ᾡ', [Some('ᾩ'), None, None]),
+    ('ᾢ', [Some('ᾪ'), None, None]),
+    ('ᾣ', [Some('ᾫ'), None, None]),
+    ('ᾤ', [Some('ᾬ'), None, None]),
+    ('ᾥ', [Some('ᾭ'), None, None]),
+    ('ᾦ', [Some('ᾮ'), None, None]),
+    ('ᾧ', [Some('ᾯ'), None, None]),
+    ('ᾨ', [Some('ᾨ'), None, None]),
+    ('ᾩ', [Some('ᾩ'), None, None]),
+    ('ᾪ', [Some('ᾪ'), None, None]),
+    ('ᾫ', [Some('ᾫ'), None, None]),
+    ('ᾬ', [Some('ᾬ'), None, None]),
+    ('ᾭ', [Some('ᾭ'), None, None]),
+    ('ᾮ', [Some('ᾮ'), None, None]),
+    ('ᾯ', [Some('ᾯ'), None, None]),
+    ('ᾲ', [Some('Ὰ'), Some('ͅ'), None]),
+    ('ᾳ', [Some('ᾼ'), None, None]),
+    ('ᾴ', [Some('Ά'), Some('ͅ'), None]),
+    ('ᾷ', [Some('Α'), Some('͂'), Some('ͅ')]),
+    ('ᾼ', [Some('ᾼ'), None, None]),
+    ('ῂ', [Some('Ὴ'), Some('ͅ'), None]),
+    ('ῃ', [Some('ῌ'), None, None]),
+    ('ῄ', [Some('Ή'), Some('ͅ'), None]),
+    ('ῇ', [Some('Η'), Some('͂'), Some('ͅ')]),
+    ('ῌ', [Some('ῌ'), None, None]),
+    ('ῲ', [Some('Ὼ'), Some('ͅ'), None]),
+    ('ῳ', [Some('ῼ'), None, None]),
+    ('ῴ', [Some('Ώ'), Some('ͅ'), None]),
+    ('ῷ', [Some('Ω'), Some('͂'), Some('ͅ')]),
+    ('ῼ', [Some('ῼ'), None, None]),
+    ('ﬀ', [Some('F'), Some('f'), None]),
+    ('ﬁ', [Some('F'), Some('i'), None]),
+    ('ﬂ', [Some('F'), Some('l'), None]),
+    ('ﬃ', [Some('F'), Some('f'), Some('i')]),
+    ('ﬄ', [Some('F'), Some('f'), Some('l')]),
+    ('ﬅ', [Some('S'), Some('t'), None]),
+    ('ﬆ', [Some('S'), Some('t'), None]),
+    ('ﬓ', [Some('Մ'), Some('ն'), None]),
+    ('ﬔ', [Some('Մ'), Some('ե'), None]),
+    ('ﬕ', [Some('Մ'), Some('ի'), None]),
+    ('ﬖ', [Some('Վ'), Some('ն'), None]),
+    ('ﬗ', [Some('Մ'), Some('խ'), None]),
+];

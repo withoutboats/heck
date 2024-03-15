@@ -1,4 +1,7 @@
-use std::{fs::OpenOptions, io::Write};
+use std::{
+    fs::OpenOptions,
+    io::{BufWriter, Write},
+};
 
 mod unicode_data;
 use unicode_data::data_files;
@@ -9,15 +12,18 @@ const UNICODE_VERSION: (u8, u8, u8) = (15, 1, 0);
 mod allowed_in_word;
 mod letter_casing;
 mod nonspacing_marks;
+mod titlecase;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let data = data_files()?;
 
-    let mut out = OpenOptions::new()
-        .write(true)
-        .create(true)
-        .truncate(true)
-        .open("../src/tables.rs")?;
+    let mut out = BufWriter::new(
+        OpenOptions::new()
+            .write(true)
+            .create(true)
+            .truncate(true)
+            .open("../src/tables.rs")?,
+    );
 
     writeln!(
         &mut out,
@@ -38,6 +44,8 @@ pub const UNICODE_VERSION: (u8, u8, u8) = {UNICODE_VERSION:?};
     letter_casing::write_table(&mut out, &data, &allowed_in_word)?;
 
     nonspacing_marks::write_table(&mut out, &data)?;
+
+    titlecase::write_table(&mut out, &data)?;
 
     Ok(())
 }

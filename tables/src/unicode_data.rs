@@ -22,6 +22,7 @@ pub struct DataFiles {
     pub derived_core_properties: String,
     pub prop_list: String,
     pub scripts: String,
+    pub special_casing: String,
 }
 
 /// Retrieve all the data files we need.
@@ -31,6 +32,7 @@ pub fn data_files() -> Result<DataFiles, Box<dyn std::error::Error>> {
         derived_core_properties: fetch_unicode_file("DerivedCoreProperties.txt")?,
         prop_list: fetch_unicode_file("PropList.txt")?,
         scripts: fetch_unicode_file("Scripts.txt")?,
+        special_casing: fetch_unicode_file("SpecialCasing.txt")?,
     })
 }
 

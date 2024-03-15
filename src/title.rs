@@ -5,7 +5,7 @@ use alloc::{
     string::{String, ToString},
 };
 
-use crate::{capitalize, transform};
+use crate::{titlecase, transform};
 
 /// This trait defines a title case conversion.
 ///
@@ -45,7 +45,7 @@ pub struct AsTitleCase<T: AsRef<str>>(pub T);
 
 impl<T: AsRef<str>> fmt::Display for AsTitleCase<T> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        transform(self.0.as_ref(), capitalize, |f| write!(f, " "), f)
+        transform(self.0.as_ref(), titlecase, |f| write!(f, " "), f)
     }
 }
 

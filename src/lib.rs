@@ -185,13 +185,25 @@ fn uppercase(s: &str, f: &mut fmt::Formatter) -> fmt::Result {
     Ok(())
 }
 
-fn capitalize(s: &str, f: &mut fmt::Formatter) -> fmt::Result {
-    let mut char_indices = s.char_indices();
-    if let Some((_, c)) = char_indices.next() {
-        write!(f, "{}", c.to_uppercase())?;
-        if let Some((i, _)) = char_indices.next() {
-            lowercase(&s[i..], f)?;
+fn titlecase(s: &str, f: &mut fmt::Formatter) -> fmt::Result {
+    // Find the first cased character
+    if let Some(titlecase_idx) =
+        s.find(|c| tables::letter_casing(c).is_some() || c.is_lowercase() || c.is_uppercase())
+    {
+        // Everything before the first cased character is passed through unchanged.
+        f.write_str(&s[..titlecase_idx])?;
+
+        let rem = &s[titlecase_idx..];
+        let mut char_indices = rem.char_indices();
+        if let Some((_, c)) = char_indices.next() {
+            write!(f, "{}", tables::to_titlecase(c))?;
+            if let Some((i, _)) = char_indices.next() {
+                lowercase(&rem[i..], f)?;
+            }
         }
+    } else {
+        // If there are no cased characters, pass through the string unchanged
+        write!(f, "{}", s)?;
     }
 
     Ok(())

@@ -2,7 +2,7 @@ use core::fmt;
 
 use alloc::{borrow::ToOwned, string::ToString};
 
-use crate::{capitalize, transform};
+use crate::{titlecase, transform};
 
 /// This trait defines a train case conversion.
 ///
@@ -42,7 +42,7 @@ pub struct AsTrainCase<T: AsRef<str>>(pub T);
 
 impl<T: AsRef<str>> fmt::Display for AsTrainCase<T> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        transform(self.0.as_ref(), capitalize, |f| write!(f, "-"), f)
+        transform(self.0.as_ref(), titlecase, |f| write!(f, "-"), f)
     }
 }
 
@@ -71,7 +71,7 @@ mod tests {
     t!(test9: "XΣXΣ baﬄe" => "Xσxς-Baﬄe");
     t!(test10: "XMLHttpRequest" => "Xml-Http-Request");
     t!(test11: "FIELD_NAME11" => "Field-Name11");
-    t!(test12: "99BOTTLES" => "99bottles");
+    t!(test12: "99BOTTLES" => "99Bottles");
     t!(test13: "FieldNamE11" => "Field-Nam-E11");
     t!(test14: "abc123def456" => "Abc123def456");
     t!(test16: "abc123DEF456" => "Abc123def456");
