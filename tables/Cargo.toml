@@ -1,0 +1,12 @@
+[package]
+name = "tables"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+bitvec = "1.0.1"
+regex = "1.10.3"
+reqwest = { version = "0.11", features = ["blocking"] }
+rustc-hash = "1.1.0"

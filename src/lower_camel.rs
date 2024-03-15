@@ -5,7 +5,7 @@ use alloc::{
     string::{String, ToString},
 };
 
-use crate::{capitalize, lowercase, transform};
+use crate::{lowercase, titlecase, transform};
 
 /// This trait defines a lower camel case conversion.
 ///
@@ -53,7 +53,7 @@ impl<T: AsRef<str>> fmt::Display for AsLowerCamelCase<T> {
                     first = false;
                     lowercase(s, f)
                 } else {
-                    capitalize(s, f)
+                    titlecase(s, f)
                 }
             },
             |_| Ok(()),

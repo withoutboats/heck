@@ -8,24 +8,42 @@ consistent, and reasonably well performing.
 
 ## Definition of a word boundary
 
-Word boundaries are defined by non-alphanumeric characters, as well as
-within those words in this manner:
+The definition of a word boundary is based on the
+[identifier word boundary](https://www.unicode.org/reports/tr55/#Identifier-Chunks)
+in Unicode Technical Standard 55. The rules are as follows:
 
-1. If an uppercase character is followed by lowercase letters, a word
-boundary is considered to be just prior to that uppercase character.
-2. If multiple uppercase characters are consecutive, they are considered to
-be within a single word, except that the last will be part of the next word
-if it is followed by lowercase characters (see rule 1).
+- The set of characters that can be in a word is
+  [`[\p{ID_Continue}\p{ID_Compat_Math_Continue}\p{Cn}\p{Co}\p{Alphabetic}\p{N}-[\p{P}-\p{Po}]]`][1],
+  plus U+05F3, U+05F4, and U+0F0B. This notably includes
+  alphabetic and numeric characters, accents and other combining marks,
+  emoji, a few mathematical symbols, a few non-word-separating punctuation marks,
+  unassigned characters, and private-use characters.
 
-That is, "HelloWorld" is segmented `Hello|World` whereas "XMLHttpRequest" is
-segmented `XML|Http|Request`.
+- Characters that cannot be in a word separate words.
+  For example, `foo_bar` is segmented `foo`|`bar`
+  because words cannout contain `_`.
+  These characters will be excluded from the output string.
 
-Characters not within words (such as spaces, punctuations, and underscores)
-are not included in the output string except as they are a part of the case
-being converted to. Multiple adjacent word boundaries (such as a series of
-underscores) are folded into one. ("hello__world" in snake case is therefore
-"hello_world", not the exact same string). Leading or trailing word boundary
-indicators are dropped, except insofar as CamelCase capitalizes the first word.
+- Words cannot be empty. For example, `_foo__bar_` is segmented `foo`|`bar`,
+  and in snake_case becomes `foo_bar`.
+
+- There is a word boundary between a lowercase (or non-Greek titlecase)
+  and an uppercase (or titlecase) letter. For example, `fooBar` is segmented
+  `foo`|`Bar` because `oB` is a lowercase letter followed by an uppercase letter.
+
+- An uppercase letter followed by a lowercase letter
+  has a word boundary before it. For example, `XMLHttpRequest` is segmented
+  `XML`|`Http`|`Request`; the `Ht` in `HttpRequest` is an uppercase letter
+  followed by a lowercase letter, so there is a word boundary before it.
+
+ - There is always a word boundary before a non-Greek titlecase letter
+   (U+01C5 'ǅ', U+01C8 'ǈ', U+01CB 'ǋ', or U+01F2 'ǲ').
+
+ - For the purpose of the preceding three rules, a letter followed
+   by some number of nonspacing marks (like accents or other diacritics)
+   is treated as if it was the letter alone. For example, `áB` is segmented `á`|`B`.
+
+[1]: https://util.unicode.org/UnicodeJsps/list-unicodeset.jsp?a=%5B%5Cp%7BID_Continue%7D%5Cp%7BID_Compat_Math_Continue%7D%5Cp%7BCn%7D%5Cp%7BCo%7D%5Cp%7BAlphabetic%7D%5Cp%7BN%7D-%5B%5Cp%7BP%7D-%5Cp%7BPo%7D%5D%5D&abb=on&g=&i=
 
 ## Cases contained in this library:
 
