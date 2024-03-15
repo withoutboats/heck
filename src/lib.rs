@@ -47,6 +47,7 @@ mod lower_camel;
 mod shouty_kebab;
 mod shouty_snake;
 mod snake;
+mod tables;
 mod title;
 mod train;
 mod upper_camel;
@@ -58,6 +59,7 @@ pub use shouty_snake::{
     AsShoutySnakeCase, AsShoutySnakeCase as AsShoutySnekCase, ToShoutySnakeCase, ToShoutySnekCase,
 };
 pub use snake::{AsSnakeCase, AsSnakeCase as AsSnekCase, ToSnakeCase, ToSnekCase};
+pub use tables::UNICODE_VERSION;
 pub use title::{AsTitleCase, ToTitleCase};
 pub use train::{AsTrainCase, ToTrainCase};
 pub use upper_camel::{
@@ -98,7 +100,7 @@ where
 
     let mut first_word = true;
 
-    for word in s.split(|c: char| !c.is_alphanumeric()) {
+    for word in s.split(|c: char| !tables::allowed_in_word(c)) {
         let mut char_indices = word.char_indices().peekable();
         let mut init = 0;
         let mut mode = WordMode::Boundary;

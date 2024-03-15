@@ -9,3 +9,6 @@ repository = "https://github.com/withoutboats/heck"
 keywords = ["string", "case", "camel", "snake", "unicode"]
 categories = ["no-std"]
 include = ["src/**/*", "LICENSE-*", "README.md", "CHANGELOG.md"]
+
+[workspace]
+members = ["tables"]
