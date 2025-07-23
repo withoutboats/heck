@@ -64,13 +64,14 @@ impl<T: AsRef<str>> fmt::Display for AsUpperCamelCase<T> {
 
 #[cfg(test)]
 mod tests {
-    use super::ToUpperCamelCase;
+    use super::{ToPascalCase, ToUpperCamelCase};
 
     macro_rules! t {
         ($t:ident : $s1:expr => $s2:expr) => {
             #[test]
             fn $t() {
-                assert_eq!($s1.to_upper_camel_case(), $s2)
+                assert_eq!($s1.to_upper_camel_case(), $s2);
+                assert_eq!($s1.to_pascal_case(), $s2);
             }
         };
     }

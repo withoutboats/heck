@@ -62,13 +62,14 @@ impl<T: AsRef<str>> fmt::Display for AsShoutySnakeCase<T> {
 
 #[cfg(test)]
 mod tests {
-    use super::ToShoutySnakeCase;
+    use super::{ToShoutySnakeCase, ToShoutySnekCase};
 
     macro_rules! t {
         ($t:ident : $s1:expr => $s2:expr) => {
             #[test]
             fn $t() {
-                assert_eq!($s1.to_shouty_snake_case(), $s2)
+                assert_eq!($s1.to_shouty_snake_case(), $s2);
+                assert_eq!($s1.TO_SHOUTY_SNEK_CASE(), $s2);
             }
         };
     }
