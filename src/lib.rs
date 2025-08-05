@@ -36,6 +36,7 @@
 //! 6. Title Case
 //! 7. SHOUTY-KEBAB-CASE
 //! 8. Train-Case
+//! 9. mid sentence case
 #![deny(missing_docs)]
 #![forbid(unsafe_code)]
 #![no_std]
@@ -44,6 +45,7 @@ extern crate alloc;
 
 mod kebab;
 mod lower_camel;
+mod mid_sentence;
 mod shouty_kebab;
 mod shouty_snake;
 mod snake;
@@ -53,6 +55,7 @@ mod upper_camel;
 
 pub use kebab::{AsKebabCase, ToKebabCase};
 pub use lower_camel::{AsLowerCamelCase, ToLowerCamelCase};
+pub use mid_sentence::{AsMidSentenceCase, ToMidSentenceCase};
 pub use shouty_kebab::{AsShoutyKebabCase, ToShoutyKebabCase};
 pub use shouty_snake::{
     AsShoutySnakeCase, AsShoutySnakeCase as AsShoutySnekCase, ToShoutySnakeCase, ToShoutySnekCase,

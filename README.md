@@ -37,6 +37,7 @@ indicators are dropped, except insofar as CamelCase capitalizes the first word.
 6. Title Case
 7. SHOUTY-KEBAB-CASE
 8. Train-Case
+9. mid sentence case
 
 ## MSRV
 
