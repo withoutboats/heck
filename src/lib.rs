@@ -38,10 +38,11 @@
 //! 8. Train-Case
 #![deny(missing_docs)]
 #![forbid(unsafe_code)]
-#![no_std]
+#![cfg_attr(not(feature = "std"), no_std)]
 
 extern crate alloc;
 
+mod cases;
 mod kebab;
 mod lower_camel;
 mod shouty_kebab;
@@ -50,7 +51,7 @@ mod snake;
 mod title;
 mod train;
 mod upper_camel;
-
+pub use cases::{AsCase, Case, CaseNotFound, ToCase, CASES};
 pub use kebab::{AsKebabCase, ToKebabCase};
 pub use lower_camel::{AsLowerCamelCase, ToLowerCamelCase};
 pub use shouty_kebab::{AsShoutyKebabCase, ToShoutyKebabCase};
