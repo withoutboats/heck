@@ -10,10 +10,10 @@
 //! within those words in this manner:
 //!
 //! 1. If an uppercase character is followed by lowercase letters, a word
-//! boundary is considered to be just prior to that uppercase character.
+//!    boundary is considered to be just prior to that uppercase character.
 //! 2. If multiple uppercase characters are consecutive, they are considered to
-//! be within a single word, except that the last will be part of the next word
-//! if it is followed by lowercase characters (see rule 1).
+//!    be within a single word, except that the last will be part of the next wo
+//!    word if it is followed by lowercase characters (see rule 1).
 //!
 //! That is, "HelloWorld" is segmented `Hello|World` whereas "XMLHttpRequest" is
 //! segmented `XML|Http|Request`.
